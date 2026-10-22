@@ -5,8 +5,7 @@ interface and deployment metadata as annotated proto3 source.
 
 The project will use a complete, source-aware protobuf `FileDescriptorSet` as
 the strict frontend-to-backend boundary and a versioned normalized manifest as
-the future generator contract. It is independent of DDAD, SPP, and internal
-Bazel tooling; those materials are neither imported nor copied.
+the future generator contract. 
 
 ## Status
 

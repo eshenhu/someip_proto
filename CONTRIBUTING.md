@@ -1,8 +1,6 @@
 # Contributing to someip_proto
 
-Thank you for contributing. This project is a public, independent repository;
-do not submit DDAD, SPP, internal-tooling, proprietary, or otherwise
-non-redistributable material.
+Thank you for contributing. This project is a public, independent repository.
 
 ## Before opening a pull request
 
