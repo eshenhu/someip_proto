@@ -3,4 +3,5 @@
 /.DS_Store
 /dist/
 gen/*
-compatibility/baselines/v*
+compatibility/baselines/v*/*
+!compatibility/baselines/v0.1.0/

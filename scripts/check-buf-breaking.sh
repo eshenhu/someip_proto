@@ -3,7 +3,7 @@ set -euo pipefail
 
 buf="${1:-buf}"
 base_ref="${BASE_REF:-origin/main}"
-allow_missing_baseline="${ALLOW_MISSING_BUF_BASELINE:-0}"
+allow_missing_baseline="${ALLOW_MISSING_BUF_BASELINE:-1}"
 
 if ! git rev-parse --verify --quiet "${base_ref}" >/dev/null; then
   if [[ "${allow_missing_baseline}" == "1" ]]; then

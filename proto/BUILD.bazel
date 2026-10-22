@@ -1,6 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("//bazel/rules:buf_descriptor.bzl", "buf_descriptor", "descriptor_smoke_test")
+load("@rules_proto//proto:defs.bzl", "proto_library")
 
 exports_files([
     "buf.lock",

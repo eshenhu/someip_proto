@@ -43,10 +43,10 @@ jobs:
         env:
           BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
         run: make buf-breaking
-      - name: Build and test Bazel targets
-        run: make bazel-test fds-smoke
       - name: Verify public example baseline artifacts
         run: make phase4-artifact-check
+      - name: Build and test Bazel targets
+        run: make bazel-test fds-smoke
       - name: Test and vet Go
         run: make go-test go-vet
       - name: Smoke-test Go fuzz targets
