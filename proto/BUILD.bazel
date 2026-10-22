@@ -1,0 +1,208 @@
+package(default_visibility = ["//visibility:public"])
+
+load("//bazel/rules:buf_descriptor.bzl", "buf_descriptor", "descriptor_smoke_test")
+
+exports_files([
+    "buf.lock",
+    "buf.yaml",
+])
+
+filegroup(
+    name = "sources",
+    srcs = glob(["**/*.proto"]),
+)
+
+proto_library(
+    name = "someip_common_options_proto",
+    srcs = ["io/github/someip_proto/options/v1alpha1/someip_common_options.proto"],
+    strip_import_prefix = "/proto",
+)
+
+proto_library(
+    name = "someip_sd_options_proto",
+    srcs = ["io/github/someip_proto/options/v1alpha1/someip_sd_options.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":someip_common_options_proto",
+        "@com_google_protobuf//:duration_proto",
+    ],
+)
+
+proto_library(
+    name = "someip_tp_options_proto",
+    srcs = ["io/github/someip_proto/options/v1alpha1/someip_tp_options.proto"],
+    strip_import_prefix = "/proto",
+)
+
+proto_library(
+    name = "someip_deployment_options_proto",
+    srcs = ["io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":someip_common_options_proto",
+        ":someip_sd_options_proto",
+        ":someip_tp_options_proto",
+    ],
+)
+
+proto_library(
+    name = "someip_options_proto",
+    srcs = ["io/github/someip_proto/options/v1alpha1/someip_options.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":someip_common_options_proto",
+        ":someip_deployment_options_proto",
+        ":someip_sd_options_proto",
+        ":someip_tp_options_proto",
+        "@com_google_protobuf//:descriptor_proto",
+        "@com_google_protobuf//:duration_proto",
+    ],
+)
+
+proto_library(
+    name = "someip_manifest_proto",
+    srcs = ["io/github/someip_proto/manifest/v1alpha1/manifest.proto"],
+    strip_import_prefix = "/proto",
+    deps = [":someip_options_proto"],
+)
+
+proto_library(
+    name = "smart_workshop_lighting_proto",
+    srcs = ["io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto"],
+    strip_import_prefix = "/proto",
+    deps = [":someip_options_proto"],
+)
+
+proto_library(
+    name = "smart_workshop_lighting_deployment_proto",
+    srcs = ["io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":smart_workshop_lighting_proto",
+        ":someip_options_proto",
+    ],
+)
+
+proto_library(
+    name = "smart_workshop_lighting_sd_tp_proto",
+    srcs = ["io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":smart_workshop_lighting_proto",
+        ":someip_options_proto",
+    ],
+)
+
+proto_library(
+    name = "smart_workshop_lighting_sd_tp_deployment_proto",
+    srcs = ["io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":smart_workshop_lighting_sd_tp_proto",
+        ":someip_options_proto",
+    ],
+)
+
+proto_library(
+    name = "schema_fixture_proto",
+    testonly = True,
+    srcs = ["io/github/someip_proto/test/v1alpha1/schema_fixture.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":someip_manifest_proto",
+        ":someip_options_proto",
+    ],
+)
+
+proto_library(
+    name = "sd_tp_schema_fixture_proto",
+    testonly = True,
+    srcs = ["io/github/someip_proto/test/v1alpha1/sd_tp_schema_fixture.proto"],
+    strip_import_prefix = "/proto",
+    deps = [":someip_options_proto"],
+)
+
+buf_descriptor(
+    name = "schema_descriptor",
+    module = "proto",
+    srcs = glob(["**/*.proto"]) + [
+        "buf.lock",
+        "buf.yaml",
+    ],
+)
+
+buf_descriptor(
+    name = "phase_2_1_valid_descriptor",
+    module = "proto",
+    srcs = [
+        "buf.lock",
+        "buf.yaml",
+        "io/github/someip_proto/options/v1alpha1/someip_common_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto",
+        "io/github/someip_proto/test/v1alpha1/phase_2_1_schema_fixture.proto",
+    ],
+)
+
+buf_descriptor(
+    name = "sd_tp_schema_descriptor",
+    module = "proto",
+    srcs = [
+        "buf.lock",
+        "buf.yaml",
+        "io/github/someip_proto/options/v1alpha1/someip_common_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto",
+        "io/github/someip_proto/test/v1alpha1/sd_tp_schema_fixture.proto",
+    ],
+)
+
+buf_descriptor(
+    name = "smart_workshop_lighting_descriptor",
+    module = "proto",
+    srcs = [
+        "buf.lock",
+        "buf.yaml",
+        "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+        "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_common_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto",
+    ],
+)
+
+buf_descriptor(
+    name = "smart_workshop_lighting_sd_tp_descriptor",
+    module = "proto",
+    srcs = [
+        "buf.lock",
+        "buf.yaml",
+        "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+        "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_common_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto",
+        "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto",
+    ],
+)
+
+descriptor_smoke_test(
+    name = "schema_descriptor_test",
+    descriptor = ":schema_descriptor",
+    expected_strings = [
+        "File-level SOME/IP metadata.",
+        "Canonical normalized contract for one selected SOME/IP deployment profile.",
+        "Verifies that aggregate service and method options resolve successfully.",
+        "Exercises zero-width unions with unequal fixed-size alternatives.",
+        "PhaseTwoOneReservedIdentifierService",
+        "google/protobuf/descriptor.proto",
+    ],
+)

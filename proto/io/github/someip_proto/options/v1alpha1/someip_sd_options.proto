@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package io.github.someip_proto.options.v1alpha1;
+
+import "google/protobuf/duration.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_common_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/options/v1alpha1;optionsv1alpha1";
+
+// Describes an inclusive duration range.
+message DurationRange {
+  // Inclusive minimum duration.
+  google.protobuf.Duration minimum = 1;
+  // Inclusive maximum duration.
+  google.protobuf.Duration maximum = 2;
+}
+
+// Describes static SOME/IP Service Discovery timing and liveness facts.
+message ServiceDiscoveryTiming {
+  // Live TTL in seconds. The value 0xFFFFFF means valid until reboot.
+  uint32 live_ttl_seconds = 1;
+  // Initial offer or find delay range.
+  DurationRange initial_delay = 2;
+  // Base delay for offer or find repetitions.
+  google.protobuf.Duration repetitions_base_delay = 3;
+  // Number of repetitions after the initial transmission.
+  uint32 repetitions_max = 4;
+  // Request-response delay range.
+  DurationRange request_response_delay = 5;
+  // Cyclic offer or find delay.
+  google.protobuf.Duration cyclic_offer_delay = 6;
+}
+
+// Describes the cardinality intent for a wildcard provider selector.
+enum ProviderSelectionMode {
+  PROVIDER_SELECTION_MODE_UNSPECIFIED = 0;
+  PROVIDER_SELECTION_MODE_ONE_MATCH = 1;
+  PROVIDER_SELECTION_MODE_ALL_MATCHES = 2;
+}
+
+// Selects a statically declared provider binding for a consumer.
+message ProviderSelector {
+  oneof selector {
+    // Selects exactly the provider with this profile-unique name.
+    string named_provider_name = 1;
+    // Selects every compatible provider binding for the target service major.
+    bool any_matching_instance = 2;
+  }
+  // Required cardinality intent for a wildcard selector.
+  ProviderSelectionMode selection_mode = 3;
+}
+
+// Describes an inclusive runtime-selected consumer port range.
+message DynamicPortRange {
+  // Inclusive lower port bound.
+  uint32 minimum_port = 1;
+  // Inclusive upper port bound.
+  uint32 maximum_port = 2;
+}
+
+// Describes one local consumer endpoint. A dynamic range constrains vendor
+// runtime allocation but does not select a concrete port during normalization.
+message ConsumerEndpoint {
+  // Binding-local symbolic endpoint name.
+  string name = 1;
+  // Canonical unicast IPv4 or IPv6 address literal.
+  string address = 2;
+  // Transport used by the endpoint.
+  TransportProtocol transport = 3;
+  oneof port {
+    // Fixed local transport port.
+    uint32 fixed_port = 4;
+    // Inclusive local port range selected by vendor runtime.
+    DynamicPortRange dynamic_port_range = 5;
+  }
+}
+
+// Describes a requested subscription to one service event group.
+message Subscription {
+  // Name of the target event group.
+  string event_group_name = 1;
+  // Requested subscription TTL in seconds.
+  uint32 ttl_seconds = 2;
+  // Binding-local consumer endpoints used for this subscription.
+  repeated string local_endpoint_names = 3;
+  // Whether the consumer requests initial data for field notifier members.
+  bool request_initial_data = 4;
+}
+
+// Identifies the server delivery mode for a service event group.
+enum EventGroupDeliveryMode {
+  EVENT_GROUP_DELIVERY_MODE_UNSPECIFIED = 0;
+  EVENT_GROUP_DELIVERY_MODE_UNICAST = 1;
+  EVENT_GROUP_DELIVERY_MODE_MULTICAST = 2;
+}
+
+// Describes the server multicast UDP destination for one event group.
+message MulticastEndpoint {
+  // Canonical multicast IPv4 or IPv6 destination address.
+  string address = 1;
+  // UDP destination port.
+  uint32 port = 2;
+}
+
+// Describes one provider-declared event-group delivery policy.
+message EventGroupDeliveryPolicy {
+  // Name of the event group declared by the offered service.
+  string event_group_name = 1;
+  // Required server delivery mode.
+  EventGroupDeliveryMode mode = 2;
+  // Required only for MULTICAST delivery and forbidden for UNICAST delivery.
+  MulticastEndpoint multicast_endpoint = 3;
+}
+
+// Describes a static provider offer and its event-group delivery policies.
+message ServiceDiscoveryOffer {
+  // Provider endpoint names advertised by this offer.
+  repeated string endpoint_names = 1;
+  // Complete offer timing and live-TTL configuration.
+  ServiceDiscoveryTiming timing = 2;
+  // One explicit delivery policy for every offered event group.
+  repeated EventGroupDeliveryPolicy event_group_delivery_policies = 3;
+}

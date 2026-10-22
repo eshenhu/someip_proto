@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package io.github.someip_proto.examples.v1alpha1;
+
+// Keeps the FDS closure complete for the service referenced by deployment metadata.
+import "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/examples/v1alpha1;examplesv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {
+  deployment_profile: {
+    profile_name: "smart-workshop-lighting"
+    version: {
+      major: 1
+      minor: 0
+      patch: 0
+    }
+    udp_application_payload_budget_bytes: 1400
+    provider_instances: {
+      service_id: 0x4a10
+      instance_id: 1
+      provider_name: "smart-workshop-lighting"
+      endpoints: {
+        name: "primary"
+        address: "192.0.2.20"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30500
+      }
+      default_endpoint_name: "primary"
+      service_lineage: {id: "smart-workshop-lighting"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingService"}
+        interface_major_version: 1
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: false
+        }
+        member_tp_configurations: {
+          member_id: 0x8001
+          tp_when_needed: false
+        }
+        member_tp_configurations: {
+          member_id: 0x8002
+          tp_when_needed: false
+        }
+      }
+    }
+  }
+};

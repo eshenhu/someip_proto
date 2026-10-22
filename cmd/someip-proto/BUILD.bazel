@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "someip-proto_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/eshenhu/someip_proto/cmd/someip-proto",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//compatibility",
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//internal/descriptor",
+        "//internal/render",
+        "//internal/semantic",
+        "//internal/version",
+    ],
+)
+
+go_binary(
+    name = "someip-proto",
+    embed = [":someip-proto_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "someip-proto_test",
+    srcs = ["main_test.go"],
+    data = ["//proto:phase_2_1_valid_descriptor"],
+    embed = [":someip-proto_lib"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "//gen/go/io/github/someip_proto/test/v1alpha1",
+        "//internal/descriptor",
+        "//internal/testutil",
+        "@org_golang_google_protobuf//encoding/protojson:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protodesc:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    ],
+)

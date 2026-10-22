@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package io.github.someip_proto.options.v1alpha1;
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/options/v1alpha1;optionsv1alpha1";
+
+// Describes the provider-authored SOME/IP-TP capability for one dispatchable
+// service member. The declaration applies to every applicable UDP flow of the
+// member; it is not a client override or a direction-specific transmission
+// setting.
+message MemberTpConfiguration {
+  // SOME/IP member identifier in the bound service.
+  uint32 member_id = 1;
+  // Whether SOME/IP-TP may be used when an applicable UDP payload needs it.
+  bool tp_when_needed = 2;
+}

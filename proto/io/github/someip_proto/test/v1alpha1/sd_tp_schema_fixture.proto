@@ -1,0 +1,344 @@
+syntax = "proto3";
+
+package io.github.someip_proto.test.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/test/v1alpha1;testv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {
+  default_byte_order: BYTE_ORDER_BIG_ENDIAN
+  deployment_profile: {
+    profile_name: "sd-tp-valid"
+    version: {
+      major: 1
+      minor: 0
+      patch: 0
+    }
+    udp_application_payload_budget_bytes: 1400
+    provider_instances: {
+      service_id: 0x4a11
+      instance_id: 1
+      provider_name: "sd-tp.udp-one"
+      endpoints: {
+        name: "udp"
+        address: "192.0.2.100"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30500
+      }
+      default_endpoint_name: "udp"
+      service_lineage: {id: "sd-tp.fixture"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPService"}
+        interface_major_version: 1
+        service_discovery_offer: {
+          endpoint_names: "udp"
+          timing: {
+            live_ttl_seconds: 0xFFFFFF
+            initial_delay: {
+              minimum: {}
+              maximum: {nanos: 10000000}
+            }
+            repetitions_base_delay: {nanos: 10000000}
+            repetitions_max: 3
+            request_response_delay: {
+              minimum: {}
+              maximum: {nanos: 5000000}
+            }
+            cyclic_offer_delay: {seconds: 1}
+          }
+          event_group_delivery_policies: {
+            event_group_name: "unicast_updates"
+            mode: EVENT_GROUP_DELIVERY_MODE_UNICAST
+          }
+          event_group_delivery_policies: {
+            event_group_name: "multicast_updates"
+            mode: EVENT_GROUP_DELIVERY_MODE_MULTICAST
+            multicast_endpoint: {
+              address: "239.192.0.1"
+              port: 30502
+            }
+          }
+        }
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 2
+          tp_when_needed: false
+        }
+        member_tp_configurations: {
+          member_id: 0x8001
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 0x8002
+          tp_when_needed: true
+        }
+      }
+    }
+    provider_instances: {
+      service_id: 0x4a12
+      instance_id: 1
+      provider_name: "sd-tp.udp-two"
+      endpoints: {
+        name: "udp"
+        address: "192.0.2.101"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30501
+      }
+      default_endpoint_name: "udp"
+      service_lineage: {id: "sd-tp.fixture"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPService"}
+        interface_major_version: 1
+        service_discovery_offer: {
+          endpoint_names: "udp"
+          timing: {
+            live_ttl_seconds: 10
+            initial_delay: {
+              minimum: {}
+              maximum: {nanos: 10000000}
+            }
+            repetitions_base_delay: {nanos: 10000000}
+            repetitions_max: 3
+            request_response_delay: {
+              minimum: {}
+              maximum: {nanos: 5000000}
+            }
+            cyclic_offer_delay: {seconds: 1}
+          }
+          event_group_delivery_policies: {
+            event_group_name: "unicast_updates"
+            mode: EVENT_GROUP_DELIVERY_MODE_UNICAST
+          }
+          event_group_delivery_policies: {
+            event_group_name: "multicast_updates"
+            mode: EVENT_GROUP_DELIVERY_MODE_MULTICAST
+            multicast_endpoint: {
+              address: "239.192.0.1"
+              port: 30502
+            }
+          }
+        }
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 2
+          tp_when_needed: false
+        }
+        member_tp_configurations: {
+          member_id: 0x8001
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 0x8002
+          tp_when_needed: true
+        }
+      }
+    }
+    consumer_bindings: {
+      consumer_name: "sd-tp.exact-consumer"
+      service: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPService"}
+      service_lineage: {id: "sd-tp.fixture"}
+      interface_major_version: 1
+      provider_selector: {named_provider_name: "sd-tp.udp-one"}
+      local_endpoints: {
+        name: "client-udp"
+        address: "192.0.2.200"
+        transport: TRANSPORT_PROTOCOL_UDP
+        fixed_port: 30510
+      }
+      default_endpoint_name: "client-udp"
+      find_timing: {live_ttl_seconds: 10}
+      subscriptions: {
+        event_group_name: "unicast_updates"
+        ttl_seconds: 10
+        local_endpoint_names: "client-udp"
+        request_initial_data: true
+      }
+      subscriptions: {
+        event_group_name: "multicast_updates"
+        ttl_seconds: 10
+      }
+    }
+    consumer_bindings: {
+      consumer_name: "sd-tp.wildcard-consumer"
+      service: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPService"}
+      service_lineage: {id: "sd-tp.fixture"}
+      interface_major_version: 1
+      provider_selector: {
+        any_matching_instance: true
+        selection_mode: PROVIDER_SELECTION_MODE_ALL_MATCHES
+      }
+      local_endpoints: {
+        name: "client-dynamic"
+        address: "192.0.2.201"
+        transport: TRANSPORT_PROTOCOL_UDP
+        dynamic_port_range: {
+          minimum_port: 30520
+          maximum_port: 30530
+        }
+      }
+      default_endpoint_name: "client-dynamic"
+      find_timing: {
+        live_ttl_seconds: 10
+        initial_delay: {
+          minimum: {}
+          maximum: {nanos: 10000000}
+        }
+        repetitions_base_delay: {nanos: 10000000}
+        repetitions_max: 1
+        request_response_delay: {
+          minimum: {}
+          maximum: {nanos: 5000000}
+        }
+        cyclic_offer_delay: {seconds: 1}
+      }
+    }
+  }
+};
+
+// Carries the small GetState request payload that always fits the fixture UDP budget.
+message StaticSDTPServiceGetStateRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries the small GetState response payload that always fits the fixture UDP budget.
+message StaticSDTPServiceGetStateResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries the small SetState request payload that always fits the fixture UDP budget.
+message StaticSDTPServiceSetStateRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries the small SetState response payload that always fits the fixture UDP budget.
+message StaticSDTPServiceSetStateResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries a small exception payload that always fits the fixture UDP budget.
+message StaticSDTPSmallException {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 reason = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries a bounded notification whose actual payload may exceed the UDP budget.
+message StaticSDTPMayPayload {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  bytes data = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    array: {
+      length_field_width: LENGTH_FIELD_WIDTH_16
+      max_items: 1500
+    }
+    max_encoded_bytes: 1502
+  }];
+}
+
+// Carries an exact notification payload that requires TP on the fixture UDP transport.
+message StaticSDTPRequiredPayload {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  bytes data = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    array: {
+      length_field_width: LENGTH_FIELD_WIDTH_NONE
+      fixed_items: 1500
+    }
+    max_encoded_bytes: 1500
+  }];
+}
+
+// Exercises static SD offers, consumer selectors and subscriptions, and all derived TP-use boundaries.
+service StaticSDTPService {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "sd-tp.fixture"}
+    event_groups: {
+      name: "unicast_updates"
+      id: 1
+    }
+    event_groups: {
+      name: "multicast_updates"
+      id: 2
+    }
+    events: {
+      name: "may_update"
+      id: 0x8001
+      payload_type: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPMayPayload"}
+      event_group_names: "multicast_updates"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+    fields: {
+      name: "required_state"
+      value_type: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPRequiredPayload"}
+      notifier_id: 0x8002
+      event_group_names: "unicast_updates"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+  };
+
+  // Exercises a TP-enabled member whose request and response never require segmentation.
+  rpc GetState(StaticSDTPServiceGetStateRequest) returns (StaticSDTPServiceGetStateResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+
+  // Exercises a TP-disabled member with request, response, and exception directions.
+  rpc SetState(StaticSDTPServiceSetStateRequest) returns (StaticSDTPServiceSetStateResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 2
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_OR_EXCEPTION
+      exception_payload_type: {fqn: ".io.github.someip_proto.test.v1alpha1.StaticSDTPSmallException"}
+    };
+  }
+}

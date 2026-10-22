@@ -1,0 +1,562 @@
+syntax = "proto3";
+
+package io.github.someip_proto.manifest.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/manifest/v1alpha1;manifestv1alpha1";
+
+// Identifies the severity of a validation or comparison diagnostic.
+enum DiagnosticSeverity {
+  DIAGNOSTIC_SEVERITY_UNSPECIFIED = 0;
+  DIAGNOSTIC_SEVERITY_WARNING = 1;
+  DIAGNOSTIC_SEVERITY_ERROR = 2;
+}
+
+// Identifies the authority that defines a validation rule.
+enum RuleAuthority {
+  RULE_AUTHORITY_UNSPECIFIED = 0;
+  RULE_AUTHORITY_NORMATIVE = 1;
+  RULE_AUTHORITY_PROJECT_POLICY = 2;
+}
+
+// Identifies an application-payload flow direction for a dispatchable member.
+enum MemberDirection {
+  MEMBER_DIRECTION_UNSPECIFIED = 0;
+  MEMBER_DIRECTION_REQUEST = 1;
+  MEMBER_DIRECTION_RESPONSE = 2;
+  MEMBER_DIRECTION_EXCEPTION = 3;
+  MEMBER_DIRECTION_NOTIFICATION = 4;
+}
+
+// Classifies a direction's effective static transport for TP analysis.
+enum EffectiveTransportClassification {
+  EFFECTIVE_TRANSPORT_CLASSIFICATION_UNSPECIFIED = 0;
+  EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP = 1;
+  EFFECTIVE_TRANSPORT_CLASSIFICATION_TCP = 2;
+  EFFECTIVE_TRANSPORT_CLASSIFICATION_NOT_APPLICABLE = 3;
+}
+
+// Describes the derived static TP-use result for an applicable member flow.
+enum TpUseResult {
+  TP_USE_RESULT_UNSPECIFIED = 0;
+  TP_USE_RESULT_NOT_APPLICABLE = 1;
+  TP_USE_RESULT_TP_NOT_CONFIGURED = 2;
+  TP_USE_RESULT_NEVER_NEEDED = 3;
+  TP_USE_RESULT_MAY_BE_NEEDED = 4;
+  TP_USE_RESULT_REQUIRED = 5;
+}
+
+// Identifies the protobuf extendee that carried an unknown runtime option.
+enum OptionExtendeeKind {
+  OPTION_EXTENDEE_KIND_UNSPECIFIED = 0;
+  OPTION_EXTENDEE_KIND_FILE = 1;
+  OPTION_EXTENDEE_KIND_SERVICE = 2;
+  OPTION_EXTENDEE_KIND_METHOD = 3;
+  OPTION_EXTENDEE_KIND_MESSAGE = 4;
+  OPTION_EXTENDEE_KIND_FIELD = 5;
+  OPTION_EXTENDEE_KIND_ONEOF = 6;
+  OPTION_EXTENDEE_KIND_ENUM = 7;
+  OPTION_EXTENDEE_KIND_ENUM_VALUE = 8;
+}
+
+// Identifies a logical source location without storing an absolute filesystem path.
+message SourceLocation {
+  // Logical protobuf import path.
+  string import_path = 1;
+  // One-based source line number.
+  uint32 line = 2;
+  // One-based source column number.
+  uint32 column = 3;
+}
+
+// Records an unknown runtime-retained option preserved from an FDS input.
+message UnknownOption {
+  // Kind of descriptor options that contained this extension.
+  OptionExtendeeKind extendee_kind = 1;
+  // Protobuf extension field number.
+  uint32 field_number = 2;
+  // Resolved extension full name when known to the descriptor registry.
+  string full_name = 3;
+  // Raw extension payload; protobuf JSON renders this value as base64.
+  bytes raw_value = 4;
+  // Source location of the descriptor carrying the option when available.
+  SourceLocation location = 5;
+  // Protobuf wire type of raw_value.
+  uint32 wire_type = 6;
+  // Original encoded unknown field, including its tag and value bytes.
+  bytes encoded_field = 7;
+}
+
+// Records a stable diagnostic emitted during normalization or comparison.
+message Diagnostic {
+  // Stable machine-readable rule code.
+  string rule_code = 1;
+  // Severity of this diagnostic.
+  DiagnosticSeverity severity = 2;
+  // Normative or project-policy authority classification.
+  RuleAuthority authority = 3;
+  // Pinned normative requirement ID or project ADR reference.
+  string authority_reference = 4;
+  // Logical source location associated with the finding.
+  SourceLocation location = 5;
+  // Human-readable remediation guidance.
+  string remediation = 6;
+  // Human-readable explanation of the finding.
+  string message = 7;
+}
+
+// Versioned canonical JSON and protobuf envelope for diagnostic-only output.
+message DiagnosticReport {
+  // Version of the diagnostic-report representation.
+  uint32 diagnostic_format_version = 1;
+  // Diagnostics in stable display order.
+  repeated Diagnostic diagnostics = 2;
+}
+
+// Captures reproducible input and tool provenance for one manifest artifact.
+message ManifestProvenance {
+  // Manifest format version.
+  uint32 manifest_format_version = 1;
+  // Options API version used to interpret custom options, for example v1alpha1.
+  string options_api_version = 2;
+  // Lowercase hexadecimal SHA-256 of the input FDS bytes.
+  string input_fds_sha256 = 3;
+  // Version of the someip-proto tool that emitted this artifact.
+  string tool_version = 4;
+  // Optional explicitly supplied source revision.
+  string source_revision = 5;
+  // Immutable Open SOME/IP source commit used by this tool release.
+  string normative_source_commit = 6;
+}
+
+// Describes static encoded-size analysis for one payload type or member.
+message EncodedSize {
+  // Conservative minimum encoded size in bytes.
+  uint64 minimum_bytes = 1;
+  // Exact encoded size in bytes when the layout is static; otherwise zero.
+  uint64 exact_bytes = 2;
+  // Conservative maximum encoded size in bytes.
+  uint64 maximum_bytes = 3;
+}
+
+// Describes a direction-specific application-payload size bound for one
+// dispatchable service member.
+message MemberDirectionalPayloadManifest {
+  // Application-payload flow direction.
+  MemberDirection direction = 1;
+  // Encoded-size bounds for this direction's payload.
+  EncodedSize encoded_size = 2;
+}
+
+// Describes the endpoint facts used to resolve one directed transport flow.
+message EffectiveEndpointManifest {
+  // Profile- or binding-local endpoint name when one is declared.
+  string endpoint_name = 1;
+  // Canonical IPv4 or IPv6 address literal.
+  string address = 2;
+  // Effective transport protocol.
+  io.github.someip_proto.options.v1alpha1.TransportProtocol transport = 3;
+  oneof port {
+    // Fixed transport port.
+    uint32 fixed_port = 4;
+    // Runtime-constrained dynamic consumer port range.
+    io.github.someip_proto.options.v1alpha1.DynamicPortRange dynamic_port_range = 5;
+  }
+}
+
+// Describes TP analysis for one directed member flow.
+message MemberDirectionTpAnalysisManifest {
+  // Application-payload flow direction.
+  MemberDirection direction = 1;
+  // Direction-specific payload bounds.
+  EncodedSize encoded_size = 2;
+  // Effective transport classification for this flow.
+  EffectiveTransportClassification effective_transport = 3;
+  // Effective endpoint used by this flow when transport is applicable.
+  EffectiveEndpointManifest endpoint = 4;
+  // Inherited provider-authored TP capability.
+  bool tp_when_needed = 5;
+  // Declared maximum unsegmented UDP application-payload size.
+  uint64 unsegmented_udp_payload_budget_bytes = 6;
+  // Derived TP-use result; never an author-selected TP mode.
+  TpUseResult tp_use_result = 7;
+  // Whether runtime TP/session handling is required if this traffic occurs.
+  bool runtime_tp_session_handling_required = 8;
+}
+
+// Describes the resolved TP contract and derived directed analysis for one
+// dispatchable member in a selected provider binding.
+message ProviderMemberTpAnalysisManifest {
+  // SOME/IP member identifier.
+  uint32 member_id = 1;
+  // Provider-authored TP capability for this member.
+  bool tp_when_needed = 2;
+  // Directed static analysis records.
+  repeated MemberDirectionTpAnalysisManifest directions = 3;
+}
+
+// Describes one provider binding that matched a consumer selector.
+message ProviderCandidateManifest {
+  // Profile-unique provider name.
+  string provider_name = 1;
+  // SOME/IP service identifier.
+  uint32 service_id = 2;
+  // SOME/IP instance identifier.
+  uint32 instance_id = 3;
+  // Bound protobuf service.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference service = 4;
+  // Bound interface major version.
+  uint32 interface_major_version = 5;
+  // Bound immutable service lineage.
+  io.github.someip_proto.options.v1alpha1.ServiceLineage service_lineage = 6;
+}
+
+// Describes a resolved consumer selector and its deterministic candidate list.
+message ResolvedProviderSelectorManifest {
+  // Authored selector and wildcard cardinality intent.
+  io.github.someip_proto.options.v1alpha1.ProviderSelector selector = 1;
+  // Matched provider bindings in canonical order.
+  repeated ProviderCandidateManifest candidates = 2;
+}
+
+// Describes one requested event-group subscription in a normalized consumer
+// binding. It records intent and static delivery policy, not runtime state.
+message ConsumerSubscriptionManifest {
+  // Authored subscription request.
+  io.github.someip_proto.options.v1alpha1.Subscription subscription = 1;
+  // Resolved event-group identifier.
+  uint32 event_group_id = 2;
+  // Provider-declared effective delivery policy.
+  io.github.someip_proto.options.v1alpha1.EventGroupDeliveryPolicy delivery_policy = 3;
+  // Whether the request includes initial-data intent. This does not assert
+  // runtime delivery, acknowledgement, or subscription state.
+  bool initial_data_requested = 4;
+}
+
+// Describes a normalized consumer service binding.
+message ConsumerServiceBindingManifest {
+  // Declared consumer binding metadata.
+  io.github.someip_proto.options.v1alpha1.ConsumerServiceBinding binding = 1;
+  // Deterministic matching provider candidates.
+  ResolvedProviderSelectorManifest provider_selector = 2;
+  // Canonical local endpoint facts.
+  repeated io.github.someip_proto.options.v1alpha1.ConsumerEndpoint local_endpoints = 3;
+  // TTL-only or complete find timing after canonicalization.
+  io.github.someip_proto.options.v1alpha1.ServiceDiscoveryTiming find_timing = 4;
+  // Requested event-group memberships and initial-data intent.
+  repeated ConsumerSubscriptionManifest subscriptions = 5;
+  // Logical source location.
+  SourceLocation location = 6;
+  // Uniform provider contract inherited after candidate-equivalence validation.
+  repeated ProviderMemberTpAnalysisManifest inherited_member_tp_analysis = 7;
+}
+
+// Describes the result of alignment analysis for one payload element.
+message AlignmentAnalysis {
+  // Alignment requirement in bytes.
+  uint32 required_alignment_bytes = 1;
+  // Whether static or modulo analysis proved the requirement.
+  bool proven = 2;
+  // Minimum byte offset from the complete SOME/IP message start.
+  uint64 minimum_offset_bytes = 3;
+  // Maximum byte offset from the complete SOME/IP message start.
+  uint64 maximum_offset_bytes = 4;
+}
+
+// Describes the effective framing consequences of a serialized string.
+message EffectiveStringFraming {
+  // Number of leading byte-order-mark bytes required by the encoding.
+  uint32 bom_bytes = 1;
+  // Number of trailing zero-termination bytes required by the encoding.
+  uint32 terminator_bytes = 2;
+  // Whether fixed-length framing requires zero fill after the terminator.
+  bool fixed_length_zero_fill = 3;
+}
+
+// Records resolved field-layout facts without requiring consumers to reapply
+// inheritance or default-resolution rules.
+message EffectiveFieldLayout {
+  // Resolved payload byte order after field, message, and file inheritance.
+  io.github.someip_proto.options.v1alpha1.ByteOrder byte_order = 1;
+  // Resolved array or string length-prefix width when one applies.
+  io.github.someip_proto.options.v1alpha1.LengthFieldWidth length_field_width = 2;
+  // Resolved framing for a string field when one applies.
+  EffectiveStringFraming string_framing = 3;
+  // Author-declared padding after a union alternative's encoded value.
+  uint64 union_padding_bytes = 4;
+}
+
+// Records effective struct framing and static evolution facts.
+message EffectivePayloadLayout {
+  // Resolved payload byte order after message and file inheritance.
+  io.github.someip_proto.options.v1alpha1.ByteOrder byte_order = 1;
+  // Resolved struct length-prefix width.
+  io.github.someip_proto.options.v1alpha1.LengthFieldWidth length_field_width = 2;
+  // Whether later schema versions may append higher wire-order elements.
+  bool extensible = 3;
+  // Highest currently declared payload wire order.
+  uint32 maximum_wire_order = 4;
+}
+
+// Describes one serialized member of a normalized payload type.
+message PayloadMemberManifest {
+  // Descriptor member name.
+  string name = 1;
+  // Protobuf field number.
+  uint32 field_number = 2;
+  // Leading-dot fully qualified protobuf type name when the member has one.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference type = 3;
+  // Normalized field layout metadata.
+  io.github.someip_proto.options.v1alpha1.FieldOptionsSpec options = 4;
+  // Computed encoded-size bounds.
+  EncodedSize encoded_size = 5;
+  // Computed alignment result.
+  AlignmentAnalysis alignment = 6;
+  // Logical source location.
+  SourceLocation location = 7;
+  // Resolved layout facts derived from the declared options.
+  EffectiveFieldLayout effective_layout = 8;
+}
+
+// Describes one alternative of a normalized SOME/IP union.
+message UnionAlternativeManifest {
+  // Descriptor field name.
+  string name = 1;
+  // Protobuf field number.
+  uint32 field_number = 2;
+  // Leading-dot fully qualified protobuf type name when the alternative has one.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference type = 3;
+  // Declared field layout metadata for this alternative.
+  io.github.someip_proto.options.v1alpha1.FieldOptionsSpec options = 4;
+  // Contiguous type identifier declared for this alternative.
+  uint32 type_id = 5;
+  // Author-declared padding after the alternative value.
+  uint64 declared_padding_bytes = 6;
+  // Computed encoded-size bounds before derived zero fill.
+  EncodedSize encoded_size = 7;
+  // Fixed zero-fill bytes required to reach the effective value slot.
+  uint64 fixed_derived_zero_fill_bytes = 8;
+  // True when bounded dynamic content must be zero-filled to the effective slot.
+  bool pad_to_effective_slot = 9;
+  // Logical source location.
+  SourceLocation location = 10;
+  // Resolved alternative layout facts derived from the declared options.
+  EffectiveFieldLayout effective_layout = 11;
+  // Computed alignment result for this alternative's value after union headers.
+  AlignmentAnalysis alignment = 12;
+}
+
+// Describes the fully resolved header and NULL behavior of a SOME/IP union.
+message EffectiveUnionLayout {
+  // Resolved order of the length and type headers.
+  io.github.someip_proto.options.v1alpha1.UnionHeaderOrder header_order = 1;
+  // Resolved discriminator width in bits.
+  uint32 discriminator_width_bits = 2;
+  // Resolved length-prefix width.
+  io.github.someip_proto.options.v1alpha1.LengthFieldWidth length_field_width = 3;
+  // Whether an unset protobuf oneof is represented by the NULL type ID zero.
+  bool allows_null = 4;
+  // Reserved discriminator value used by the NULL alternative when allowed.
+  uint32 null_type_id = 5;
+}
+
+// Describes a normalized proto oneof represented as a SOME/IP union.
+message UnionManifest {
+  // Declared oneof metadata.
+  io.github.someip_proto.options.v1alpha1.OneofOptionsSpec options = 1;
+  // Union headers are always encoded in network byte order.
+  io.github.someip_proto.options.v1alpha1.ByteOrder header_byte_order = 2;
+  // Computed encoded-size bounds including headers and declared padding.
+  EncodedSize encoded_size = 3;
+  // Largest effective encoded alternative value extent, excluding union headers.
+  uint64 effective_value_slot_bytes = 4;
+  // Alternatives ordered by declared type identifier.
+  repeated UnionAlternativeManifest alternatives = 5;
+  // Logical source location.
+  SourceLocation location = 6;
+  // Resolved union defaults and NULL behavior.
+  EffectiveUnionLayout effective_layout = 7;
+}
+
+// Describes one ordered element of a normalized payload layout.
+message PayloadLayoutElement {
+  oneof element {
+    // An ordinary protobuf field serialized at its declared wire order.
+    PayloadMemberManifest member = 1;
+    // A protobuf oneof serialized as a SOME/IP union at its declared wire order.
+    UnionManifest union = 2;
+  }
+}
+
+// Describes one normalized serializable protobuf payload type.
+message PayloadTypeManifest {
+  // Leading-dot fully qualified protobuf message name.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference type = 1;
+  // Normalized message layout metadata.
+  io.github.someip_proto.options.v1alpha1.MessageOptionsSpec options = 2;
+  // Legacy field-only view retained for source compatibility. Canonical Phase
+  // 2.1 producers leave it empty and use layout_elements instead.
+  repeated PayloadMemberManifest members = 3 [deprecated = true];
+  // Computed payload encoded-size bounds.
+  EncodedSize encoded_size = 4;
+  // Logical source location.
+  SourceLocation location = 5;
+  // Fields and unions ordered by SOME/IP wire order.
+  repeated PayloadLayoutElement layout_elements = 6;
+  // Resolved framing and static-evolution facts.
+  EffectivePayloadLayout effective_layout = 7;
+}
+
+// Describes a dispatchable member of a normalized SOME/IP service.
+message ServiceMemberManifest {
+  // Stable member name.
+  string name = 1;
+  // SOME/IP member identifier.
+  uint32 member_id = 2;
+  // Member category, such as method, event, field getter, field setter, or notifier.
+  string kind = 3;
+  // Leading-dot fully qualified protobuf request payload type, if applicable.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference request_payload_type = 4;
+  // Leading-dot fully qualified protobuf response or event payload type, if applicable.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference response_payload_type = 5;
+  // Event groups containing this event or field notifier.
+  repeated string event_group_names = 6;
+  // Publication behavior for events and field notifiers.
+  io.github.someip_proto.options.v1alpha1.PublicationPolicy publication = 7;
+  // Logical source location.
+  SourceLocation location = 8;
+  // Declared method behavior when this member is an RPC method or field accessor.
+  io.github.someip_proto.options.v1alpha1.MethodOptionsSpec method_options = 9;
+  // Direction-specific payload bounds for this dispatchable member.
+  repeated MemberDirectionalPayloadManifest directional_payloads = 10;
+}
+
+// Describes a logical SOME/IP field and its accessor/notifier relationships.
+message ServiceFieldManifest {
+  // Declared logical field metadata.
+  io.github.someip_proto.options.v1alpha1.ServiceField field = 1;
+  // Logical source location.
+  SourceLocation location = 2;
+}
+
+// Describes a resolved SOME/IP service as used by one selected profile.
+message ServiceManifest {
+  // Leading-dot fully qualified protobuf service name.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference service = 1;
+  // Legacy provider-specific ID retained for source compatibility. Canonical
+  // Phase 2.1 output uses provider service-version bindings instead.
+  uint32 service_id = 2 [deprecated = true];
+  // Interface major version.
+  uint32 interface_major_version = 3;
+  // Interface minor version.
+  uint32 interface_minor_version = 4;
+  // Service members ordered by SOME/IP member identifier and name.
+  repeated ServiceMemberManifest members = 5;
+  // Event groups declared by the service.
+  repeated io.github.someip_proto.options.v1alpha1.EventGroup event_groups = 6;
+  // Logical source location.
+  SourceLocation location = 7;
+  // Immutable lineage shared by incompatible service-major definitions.
+  io.github.someip_proto.options.v1alpha1.ServiceLineage service_lineage = 8;
+  // Logical fields and their accessor/notifier relationships, ordered by name.
+  repeated ServiceFieldManifest fields = 9;
+  // Documentation URIs declared for this service.
+  repeated string documentation_uris = 10;
+}
+
+// Describes one normalized enum value used by a payload layout.
+message EnumValueManifest {
+  // Descriptor value name.
+  string name = 1;
+  // Numeric enum value.
+  int32 number = 2;
+  // Declared value metadata.
+  io.github.someip_proto.options.v1alpha1.EnumValueOptionsSpec options = 3;
+  // Logical source location.
+  SourceLocation location = 4;
+}
+
+// Describes a normalized protobuf enum used by a payload layout.
+message EnumManifest {
+  // Leading-dot fully qualified protobuf enum name.
+  io.github.someip_proto.options.v1alpha1.ProtobufReference type = 1;
+  // Declared SOME/IP enum metadata.
+  io.github.someip_proto.options.v1alpha1.EnumOptionsSpec options = 2;
+  // Values ordered by numeric value and name.
+  repeated EnumValueManifest values = 3;
+  // Logical source location.
+  SourceLocation location = 4;
+}
+
+// Describes one normalized service-major binding of a provider identity.
+message ProviderServiceVersionBindingManifest {
+  // Declared binding metadata.
+  io.github.someip_proto.options.v1alpha1.ServiceVersionBinding binding = 1;
+  // Resolved immutable lineage of the bound service.
+  io.github.someip_proto.options.v1alpha1.ServiceLineage service_lineage = 2;
+  // Conservative maximum SOME/IP application payload for this service version.
+  uint64 maximum_application_payload_bytes = 3;
+  // Conservative maximum total SOME/IP message size, including the 16-byte header.
+  uint64 maximum_someip_message_bytes = 4;
+  // Logical source location.
+  SourceLocation location = 5;
+  // Provider-declared static Service Discovery offer.
+  io.github.someip_proto.options.v1alpha1.ServiceDiscoveryOffer service_discovery_offer = 6;
+  // Effective delivery policies for every offered event group.
+  repeated io.github.someip_proto.options.v1alpha1.EventGroupDeliveryPolicy event_group_delivery_policies = 7;
+  // Provider-authored per-member TP declarations.
+  repeated io.github.someip_proto.options.v1alpha1.MemberTpConfiguration member_tp_configurations = 8;
+  // Derived directed TP analysis for this binding.
+  repeated ProviderMemberTpAnalysisManifest member_tp_analysis = 9;
+}
+
+// Describes a resolved provider instance in the selected profile.
+message ProviderInstanceManifest {
+  // Normalized shared provider identity metadata.
+  io.github.someip_proto.options.v1alpha1.ProviderInstance instance = 1;
+  // Conservative maximum SOME/IP application payload across all bound services.
+  uint64 maximum_application_payload_bytes = 2;
+  // Conservative maximum total SOME/IP message size across all bound services.
+  uint64 maximum_someip_message_bytes = 3;
+  // Logical source location.
+  SourceLocation location = 4;
+  // Ordered service-major bindings sharing this provider identity.
+  repeated ProviderServiceVersionBindingManifest service_version_bindings = 5;
+}
+
+// Describes the selected, normalized deployment profile.
+message ProfileManifest {
+  // Profile name.
+  string profile_name = 1;
+  // Profile semantic version.
+  io.github.someip_proto.options.v1alpha1.SemanticVersion version = 2;
+  // Declared unsegmented UDP application payload budget.
+  uint64 udp_application_payload_budget_bytes = 3;
+  // Provider instances ordered by service and instance identifier.
+  repeated ProviderInstanceManifest provider_instances = 4;
+  // Logical source location.
+  SourceLocation location = 5;
+  // Documentation URIs declared for the selected profile's source file.
+  repeated string documentation_uris = 6;
+  // Consumer service bindings ordered by consumer name and target service.
+  repeated ConsumerServiceBindingManifest consumer_bindings = 7;
+}
+
+// Canonical normalized contract for one selected SOME/IP deployment profile.
+message Manifest {
+  // Reproducible input and tool provenance.
+  ManifestProvenance provenance = 1;
+  // Selected normalized deployment profile.
+  ProfileManifest profile = 2;
+  // Resolved services ordered by service identifier and full name.
+  repeated ServiceManifest services = 3;
+  // Reachable payload types ordered by fully qualified protobuf name.
+  repeated PayloadTypeManifest payload_types = 4;
+  // Preserved unknown runtime options ordered by extension name and payload.
+  repeated UnknownOption unknown_options = 5;
+  // Diagnostics emitted during normalization, validation, or comparison.
+  repeated Diagnostic diagnostics = 6;
+  // Reachable enum types ordered by fully qualified protobuf name.
+  repeated EnumManifest enum_types = 7;
+}

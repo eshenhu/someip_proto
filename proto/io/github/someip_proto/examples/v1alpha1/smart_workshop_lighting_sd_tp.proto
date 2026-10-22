@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package io.github.someip_proto.examples.v1alpha1;
+
+import "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/examples/v1alpha1;examplesv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {default_byte_order: BYTE_ORDER_BIG_ENDIAN};
+
+// Carries the small GetLightingState request for the complete static SD/TP example.
+message SmartWorkshopLightingSDTPServiceGetLightingStateRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 request_token = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+}
+
+// Carries the small GetLightingState response for the complete static SD/TP example.
+message SmartWorkshopLightingSDTPServiceGetLightingStateResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  LightingState state = 1 [(io.github.someip_proto.options.v1alpha1.field) = {wire_order: 1}];
+}
+
+// Carries the small SetLightingState request for the complete static SD/TP example.
+message SmartWorkshopLightingSDTPServiceSetLightingStateRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  LightingState desired_state = 1 [(io.github.someip_proto.options.v1alpha1.field) = {wire_order: 1}];
+}
+
+// Carries the small SetLightingState response for the complete static SD/TP example.
+message SmartWorkshopLightingSDTPServiceSetLightingStateResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  LightingState accepted_state = 1 [(io.github.someip_proto.options.v1alpha1.field) = {wire_order: 1}];
+}
+
+// Carries a bounded preview update that may require TP on UDP.
+message SmartWorkshopLightingPreviewUpdate {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  bytes pixels = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    array: {
+      length_field_width: LENGTH_FIELD_WIDTH_16
+      max_items: 1500
+    }
+    max_encoded_bytes: 1502
+  }];
+}
+
+// Carries a fixed complete snapshot that requires TP on UDP.
+message SmartWorkshopLightingSnapshot {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  bytes pixels = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    array: {
+      length_field_width: LENGTH_FIELD_WIDTH_NONE
+      fixed_items: 1500
+    }
+    max_encoded_bytes: 1500
+  }];
+}
+
+// Demonstrates the complete static Service Discovery and TP contract for workshop lighting.
+service SmartWorkshopLightingSDTPService {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "smart-workshop-lighting-sd-tp"}
+    event_groups: {
+      name: "unicast_snapshots"
+      id: 1
+    }
+    event_groups: {
+      name: "multicast_previews"
+      id: 2
+    }
+    events: {
+      name: "preview_updated"
+      id: 0x8001
+      payload_type: {fqn: ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingPreviewUpdate"}
+      event_group_names: "multicast_previews"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+    fields: {
+      name: "lighting_snapshot"
+      value_type: {fqn: ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSnapshot"}
+      notifier_id: 0x8002
+      event_group_names: "unicast_snapshots"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+  };
+
+  // Reads the small current state and demonstrates a TP-enabled but never-needed method.
+  rpc GetLightingState(SmartWorkshopLightingSDTPServiceGetLightingStateRequest) returns (SmartWorkshopLightingSDTPServiceGetLightingStateResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+
+  // Updates the small lighting state and demonstrates a TP-disabled method.
+  rpc SetLightingState(SmartWorkshopLightingSDTPServiceSetLightingStateRequest) returns (SmartWorkshopLightingSDTPServiceSetLightingStateResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 2
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}

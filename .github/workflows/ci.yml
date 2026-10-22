@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.1'
+      - uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: 1.73.0
+      - name: Check formatting
+        run: make buf-format-check go-format-check
+      - name: Lint protobuf schemas
+        run: make buf-lint
+      - name: Verify generated Go protobuf bindings
+        run: make go-generate-check
+      - name: Check protobuf compatibility
+        env:
+          BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: make buf-breaking
+      - name: Build and test Bazel targets
+        run: make bazel-test fds-smoke
+      - name: Verify public example baseline artifacts
+        run: make phase4-artifact-check
+      - name: Test and vet Go
+        run: make go-test go-vet
+      - name: Smoke-test Go fuzz targets
+        run: make go-fuzz-smoke
+      - name: Verify dependency locks
+        run: make lock-check

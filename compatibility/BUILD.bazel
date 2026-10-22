@@ -1,0 +1,50 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "compatibility",
+    srcs = [
+        "compare.go",
+        "diagnostic.go",
+        "manifest.go",
+        "metadata.go",
+    ],
+    importpath = "github.com/eshenhu/someip_proto/compatibility",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "//internal/descriptor",
+        "//internal/semantic",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    ],
+)
+
+go_test(
+    name = "compatibility_test",
+    srcs = [
+        "baseline_test.go",
+        "compare_test.go",
+        "manifest_test.go",
+    ],
+    data = [
+        "//compatibility/baselines:v0_1_0_smart_workshop_lighting_artifacts",
+        "//proto:smart_workshop_lighting_descriptor",
+        "//proto:smart_workshop_lighting_sd_tp_descriptor",
+    ],
+    embed = [":compatibility"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "//gen/go/io/github/someip_proto/test/v1alpha1",
+        "//internal/descriptor",
+        "//internal/render",
+        "//internal/semantic",
+        "//internal/testutil",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protodesc:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    ],
+)

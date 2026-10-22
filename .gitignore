@@ -1,0 +1,6 @@
+/bazel-*
+/.cache/
+/.DS_Store
+/dist/
+gen/*
+compatibility/baselines/v*

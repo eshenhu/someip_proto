@@ -1,0 +1,55 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "semantic",
+    srcs = [
+        "canonical.go",
+        "documentation.go",
+        "domain.go",
+        "normalize.go",
+        "payload.go",
+        "provenance.go",
+        "profile.go",
+        "rules.go",
+        "sd.go",
+        "service.go",
+        "tp.go",
+        "types.go",
+    ],
+    importpath = "github.com/eshenhu/someip_proto/internal/semantic",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "//internal/descriptor",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+        "@org_golang_google_protobuf//types/known/durationpb:go_default_library",
+    ],
+)
+
+go_test(
+    name = "semantic_test",
+    srcs = [
+        "canonical_test.go",
+        "normalize_test.go",
+        "rules_test.go",
+        "sd_tp_test.go",
+    ],
+    data = glob(["testdata/**"]) + ["//docs:rule-catalog.md"],
+    embed = [":semantic"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "//gen/go/io/github/someip_proto/test/v1alpha1",
+        "//internal/descriptor",
+        "//internal/render",
+        "//internal/testutil",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protodesc:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+        "@org_golang_google_protobuf//types/known/emptypb:go_default_library",
+    ],
+)

@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Release verification (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Fetch protected main baseline
+        run: git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.1"
+      - uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: 1.73.0
+      - name: Run release gates
+        env:
+          BASE_REF: origin/main
+        run: make check
+
+  publish:
+    name: Publish release
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.1"
+      - uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          version: 1.73.0
+      - name: Package release assets
+        env:
+          SOURCE_REVISION: ${{ github.sha }}
+        run: bash ./scripts/release-package.sh "${GITHUB_REF_NAME}"
+      - name: Publish protobuf schemas to BSR
+        env:
+          BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
+        run: |
+          test -n "${BUF_TOKEN}" || { echo "release requires BUF_TOKEN" >&2; exit 1; }
+          buf push proto
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: dist
+          format: spdx-json
+          output-file: dist/someip-proto_${{ github.ref_name }}.spdx.json
+      - name: Refresh SHA-256 checksums
+        run: bash ./scripts/write-sha256sums.sh dist
+      - name: Attest release assets
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/**
+      - name: Publish immutable GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" --verify-tag --generate-notes
+          find dist -type f -print0 | xargs -0 gh release upload "${GITHUB_REF_NAME}" --clobber

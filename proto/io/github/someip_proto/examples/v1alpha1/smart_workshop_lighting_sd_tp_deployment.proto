@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package io.github.someip_proto.examples.v1alpha1;
+
+// Keeps the FDS closure complete for the static SD/TP service referenced by deployment metadata.
+import "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/examples/v1alpha1;examplesv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {
+  deployment_profile: {
+    profile_name: "smart-workshop-lighting-sd-tp"
+    version: {
+      major: 1
+      minor: 0
+      patch: 0
+    }
+    udp_application_payload_budget_bytes: 1400
+    provider_instances: {
+      service_id: 0x4a11
+      instance_id: 1
+      provider_name: "smart-workshop-lighting-sd-tp"
+      endpoints: {
+        name: "provider-udp"
+        address: "192.0.2.30"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30500
+      }
+      default_endpoint_name: "provider-udp"
+      service_lineage: {id: "smart-workshop-lighting-sd-tp"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"}
+        interface_major_version: 1
+        service_discovery_offer: {
+          endpoint_names: "provider-udp"
+          timing: {
+            live_ttl_seconds: 0xFFFFFF
+            initial_delay: {
+              minimum: {}
+              maximum: {nanos: 10000000}
+            }
+            repetitions_base_delay: {nanos: 10000000}
+            repetitions_max: 3
+            request_response_delay: {
+              minimum: {}
+              maximum: {nanos: 5000000}
+            }
+            cyclic_offer_delay: {seconds: 1}
+          }
+          event_group_delivery_policies: {
+            event_group_name: "unicast_snapshots"
+            mode: EVENT_GROUP_DELIVERY_MODE_UNICAST
+          }
+          event_group_delivery_policies: {
+            event_group_name: "multicast_previews"
+            mode: EVENT_GROUP_DELIVERY_MODE_MULTICAST
+            multicast_endpoint: {
+              address: "239.192.0.1"
+              port: 30502
+            }
+          }
+        }
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 2
+          tp_when_needed: false
+        }
+        member_tp_configurations: {
+          member_id: 0x8001
+          tp_when_needed: true
+        }
+        member_tp_configurations: {
+          member_id: 0x8002
+          tp_when_needed: true
+        }
+      }
+    }
+    consumer_bindings: {
+      consumer_name: "smart-workshop-lighting-dashboard"
+      service: {fqn: ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"}
+      service_lineage: {id: "smart-workshop-lighting-sd-tp"}
+      interface_major_version: 1
+      provider_selector: {named_provider_name: "smart-workshop-lighting-sd-tp"}
+      local_endpoints: {
+        name: "dashboard-udp"
+        address: "192.0.2.40"
+        transport: TRANSPORT_PROTOCOL_UDP
+        dynamic_port_range: {
+          minimum_port: 30510
+          maximum_port: 30520
+        }
+      }
+      default_endpoint_name: "dashboard-udp"
+      find_timing: {
+        live_ttl_seconds: 10
+        initial_delay: {
+          minimum: {}
+          maximum: {nanos: 10000000}
+        }
+        repetitions_base_delay: {nanos: 10000000}
+        repetitions_max: 1
+        request_response_delay: {
+          minimum: {}
+          maximum: {nanos: 5000000}
+        }
+        cyclic_offer_delay: {seconds: 1}
+      }
+      subscriptions: {
+        event_group_name: "unicast_snapshots"
+        ttl_seconds: 10
+        local_endpoint_names: "dashboard-udp"
+        request_initial_data: true
+      }
+      subscriptions: {
+        event_group_name: "multicast_previews"
+        ttl_seconds: 10
+      }
+    }
+  }
+};

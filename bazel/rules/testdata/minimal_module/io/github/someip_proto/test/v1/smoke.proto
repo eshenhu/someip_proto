@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package io.github.someip_proto.test.v1;
+
+import "google/protobuf/empty.proto";
+
+// Descriptor bridge smoke fixture.
+message Smoke {
+  google.protobuf.Empty empty = 1;
+}

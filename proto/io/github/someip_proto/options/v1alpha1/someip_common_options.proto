@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package io.github.someip_proto.options.v1alpha1;
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/options/v1alpha1;optionsv1alpha1";
+
+// Identifies a SOME/IP transport protocol for a deployment endpoint.
+enum TransportProtocol {
+  TRANSPORT_PROTOCOL_UNSPECIFIED = 0;
+  TRANSPORT_PROTOCOL_UDP = 1;
+  TRANSPORT_PROTOCOL_TCP = 2;
+}
+
+// Represents a project-defined semantic version.
+message SemanticVersion {
+  // Major version component.
+  uint32 major = 1;
+  // Minor version component.
+  uint32 minor = 2;
+  // Patch version component.
+  uint32 patch = 3;
+  // Optional SemVer pre-release identifier.
+  string prerelease = 4;
+  // Optional SemVer build metadata.
+  string build_metadata = 5;
+}
+
+// References a protobuf descriptor by its leading-dot fully qualified name.
+message ProtobufReference {
+  // Leading-dot fully qualified protobuf name.
+  string fqn = 1;
+}
+
+// Identifies an immutable service lineage shared by incompatible service-major
+// protobuf definitions.
+message ServiceLineage {
+  // Stable, immutable project-defined lineage identity.
+  string id = 1;
+}
+
+// Describes a static provider endpoint in a deployment profile.
+message Endpoint {
+  // Profile-local symbolic endpoint name.
+  string name = 1;
+  // Canonical IPv4 or IPv6 address literal.
+  string address = 2;
+  // Transport used by the endpoint.
+  TransportProtocol transport = 3;
+  // Transport port number.
+  uint32 port = 4;
+}
+
+// Overrides a containing endpoint collection's default endpoint for one
+// dispatchable member.
+message MemberEndpointOverride {
+  // SOME/IP member identifier in the referenced service.
+  uint32 member_id = 1;
+  // Name of an endpoint declared by the containing endpoint collection.
+  string endpoint_name = 2;
+}

@@ -1,0 +1,28 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "render",
+    srcs = [
+        "render.go",
+        "write.go",
+    ],
+    importpath = "github.com/eshenhu/someip_proto/internal/render",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "@org_golang_google_protobuf//encoding/protojson:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
+    ],
+)
+
+go_test(
+    name = "render_test",
+    srcs = ["render_test.go"],
+    embed = [":render"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "@org_golang_google_protobuf//proto:go_default_library",
+    ],
+)

@@ -1,0 +1,418 @@
+syntax = "proto3";
+
+package io.github.someip_proto.options.v1alpha1;
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/duration.proto";
+import public "io/github/someip_proto/options/v1alpha1/someip_common_options.proto";
+import public "io/github/someip_proto/options/v1alpha1/someip_deployment_options.proto";
+import public "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto";
+import public "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/options/v1alpha1;optionsv1alpha1";
+
+// File-level SOME/IP metadata.
+extend google.protobuf.FileOptions {
+  FileOptionsSpec file = 62000;
+}
+
+// Service-level SOME/IP interface metadata.
+extend google.protobuf.ServiceOptions {
+  ServiceOptionsSpec service = 62001;
+}
+
+// Method-level SOME/IP member metadata.
+extend google.protobuf.MethodOptions {
+  MethodOptionsSpec method = 62002;
+}
+
+// Message-level SOME/IP payload-layout metadata.
+extend google.protobuf.MessageOptions {
+  MessageOptionsSpec message = 62003;
+}
+
+// Field-level SOME/IP payload-layout and domain metadata.
+extend google.protobuf.FieldOptions {
+  FieldOptionsSpec field = 62004;
+}
+
+// Oneof-level SOME/IP union metadata.
+extend google.protobuf.OneofOptions {
+  OneofOptionsSpec oneof = 62005;
+}
+
+// Enum-level SOME/IP wire metadata.
+extend google.protobuf.EnumOptions {
+  EnumOptionsSpec enum = 62006;
+}
+
+// Enum-value-level SOME/IP metadata.
+extend google.protobuf.EnumValueOptions {
+  EnumValueOptionsSpec enum_value = 62007;
+}
+
+// Identifies the byte order for a payload element. An unspecified value inherits
+// from the containing message or file as applicable.
+enum ByteOrder {
+  BYTE_ORDER_UNSPECIFIED = 0;
+  BYTE_ORDER_BIG_ENDIAN = 1;
+  BYTE_ORDER_LITTLE_ENDIAN = 2;
+}
+
+// Identifies a method's SOME/IP communication form.
+enum MethodKind {
+  METHOD_KIND_UNSPECIFIED = 0;
+  METHOD_KIND_REQUEST_RESPONSE = 1;
+  METHOD_KIND_FIRE_AND_FORGET = 2;
+}
+
+// Restricts the SOME/IP message types permitted for a non-OK method result.
+enum ResponsePolicy {
+  RESPONSE_POLICY_UNSPECIFIED = 0;
+  RESPONSE_POLICY_RESPONSE_ONLY = 1;
+  RESPONSE_POLICY_EXCEPTION_ONLY = 2;
+  RESPONSE_POLICY_RESPONSE_OR_EXCEPTION = 3;
+}
+
+// Identifies when an event or field notifier is published.
+enum PublicationPolicyKind {
+  PUBLICATION_POLICY_KIND_UNSPECIFIED = 0;
+  PUBLICATION_POLICY_KIND_EVENT_DRIVEN = 1;
+  PUBLICATION_POLICY_KIND_ON_CHANGE = 2;
+  PUBLICATION_POLICY_KIND_CYCLIC = 3;
+  PUBLICATION_POLICY_KIND_EPSILON_CHANGE = 4;
+}
+
+// Selects the order of a union's type and length fields.
+enum UnionHeaderOrder {
+  UNION_HEADER_ORDER_UNSPECIFIED = 0;
+  UNION_HEADER_ORDER_TYPE_THEN_LENGTH = 1;
+  UNION_HEADER_ORDER_LENGTH_THEN_TYPE = 2;
+}
+
+// Represents the static SOME/IP representation of a protobuf scalar or enum.
+enum ScalarRepresentation {
+  SCALAR_REPRESENTATION_UNSPECIFIED = 0;
+  SCALAR_REPRESENTATION_BOOLEAN_8 = 1;
+  SCALAR_REPRESENTATION_SIGNED_INTEGER_8 = 2;
+  SCALAR_REPRESENTATION_SIGNED_INTEGER_16 = 3;
+  SCALAR_REPRESENTATION_SIGNED_INTEGER_32 = 4;
+  SCALAR_REPRESENTATION_SIGNED_INTEGER_64 = 5;
+  SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8 = 6;
+  SCALAR_REPRESENTATION_UNSIGNED_INTEGER_16 = 7;
+  SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32 = 8;
+  SCALAR_REPRESENTATION_UNSIGNED_INTEGER_64 = 9;
+  SCALAR_REPRESENTATION_FLOAT_32 = 10;
+  SCALAR_REPRESENTATION_FLOAT_64 = 11;
+  SCALAR_REPRESENTATION_ENUM_8 = 12;
+  SCALAR_REPRESENTATION_ENUM_16 = 13;
+  SCALAR_REPRESENTATION_ENUM_32 = 14;
+}
+
+// Identifies the encoding of a protobuf string on the SOME/IP wire.
+enum StringEncoding {
+  STRING_ENCODING_UNSPECIFIED = 0;
+  STRING_ENCODING_ASCII = 1;
+  STRING_ENCODING_UTF8 = 2;
+  STRING_ENCODING_UTF16_BE = 3;
+  STRING_ENCODING_UTF16_LE = 4;
+}
+
+// Represents a length prefix width in bits. A zero-width prefix denotes a
+// fixed-size element where the containing metadata provides the fixed bound.
+enum LengthFieldWidth {
+  LENGTH_FIELD_WIDTH_UNSPECIFIED = 0;
+  LENGTH_FIELD_WIDTH_NONE = 1;
+  LENGTH_FIELD_WIDTH_8 = 2;
+  LENGTH_FIELD_WIDTH_16 = 3;
+  LENGTH_FIELD_WIDTH_32 = 4;
+}
+
+// Represents an exact rational number without floating-point loss.
+message Rational {
+  // Signed numerator.
+  int64 numerator = 1;
+  // Positive denominator.
+  uint64 denominator = 2;
+}
+
+// Describes a numeric value's unit, scaling, offset, and inclusive bounds.
+message ValueDomain {
+  // Optional human- and generator-readable unit identifier.
+  string unit = 1;
+  // Exact wire-to-domain scale factor.
+  Rational scale = 2;
+  // Exact wire-to-domain offset.
+  Rational offset = 3;
+  // Optional inclusive lower bound in the domain unit.
+  Rational minimum = 4;
+  // Optional inclusive upper bound in the domain unit.
+  Rational maximum = 5;
+}
+
+// Describes the timing properties attached to a method.
+message MethodTiming {
+  // Optional maximum time between sending a request and receiving a response.
+  google.protobuf.Duration response_timeout = 1;
+  // Optional minimum interval between client retries.
+  google.protobuf.Duration retry_delay = 2;
+}
+
+// Describes an event or notifier publication strategy.
+message PublicationPolicy {
+  // Publication strategy.
+  PublicationPolicyKind kind = 1;
+  // Required for cyclic publication where applicable.
+  google.protobuf.Duration cycle = 2;
+  // Optional minimum interval between publications.
+  google.protobuf.Duration debounce = 3;
+  // Optional retention interval for the most recently published value.
+  google.protobuf.Duration retention = 4;
+  // Required exact raw-value threshold for epsilon-change publication.
+  Rational epsilon = 5;
+}
+
+// Describes a declared non-OK SOME/IP return code for a method.
+message ReturnCode {
+  // Numeric SOME/IP return code.
+  uint32 code = 1;
+  // Stable symbolic name for the return code.
+  string name = 2;
+  // Optional description intended for generated documentation.
+  string description = 3;
+}
+
+// Describes one named event group owned by a service.
+message EventGroup {
+  // Stable local event-group name.
+  string name = 1;
+  // SOME/IP event-group identifier.
+  uint32 id = 2;
+}
+
+// Describes an event declared by a service option.
+message Event {
+  // Stable local event name.
+  string name = 1;
+  // SOME/IP event identifier.
+  uint32 id = 2;
+  // Leading-dot fully qualified protobuf name of the event payload message.
+  ProtobufReference payload_type = 3;
+  // Names of event groups containing this event.
+  repeated string event_group_names = 4;
+  // Publication behavior for this event.
+  PublicationPolicy publication = 5;
+}
+
+// Describes a field declared by a service option.
+message ServiceField {
+  // Stable local field name.
+  string name = 1;
+  // Leading-dot fully qualified protobuf name of the field value message.
+  ProtobufReference value_type = 2;
+  // Leading-dot fully qualified protobuf name of the optional getter method.
+  ProtobufReference getter_method = 3;
+  // Leading-dot fully qualified protobuf name of the optional setter method.
+  ProtobufReference setter_method = 4;
+  // SOME/IP identifier of the optional notifier event.
+  uint32 notifier_id = 5;
+  // Names of event groups containing this field notifier.
+  repeated string event_group_names = 6;
+  // Publication behavior for the optional notifier.
+  PublicationPolicy publication = 7;
+}
+
+// Describes a static repeated-field or byte-array layout.
+message ArrayLayout {
+  // Width of the array byte-length prefix.
+  LengthFieldWidth length_field_width = 1;
+  // Required number of items for a fixed-size array.
+  uint64 fixed_items = 2;
+  // Required maximum item count for a dynamic-size array.
+  uint64 max_items = 3;
+}
+
+// Describes a static protobuf string layout.
+message StringLayout {
+  // Encoding used for the serialized string.
+  StringEncoding encoding = 1;
+  // Width of the byte-length prefix, or NONE for a fixed-size string.
+  LengthFieldWidth length_field_width = 2;
+  // Required encoded size for a fixed-size string, including required BOM and terminator.
+  uint64 fixed_encoded_bytes = 3;
+  // Required maximum encoded size for a dynamic string, including required BOM and terminator.
+  uint64 max_encoded_bytes = 4;
+}
+
+// Describes one named bit in an unsigned SOME/IP bitfield.
+message NamedBit {
+  // Zero-based bit position.
+  uint32 bit_index = 1;
+  // Stable name of the bit.
+  string name = 2;
+  // Optional semantic name when the bit is clear.
+  string zero_name = 3;
+  // Optional semantic name when the bit is set.
+  string one_name = 4;
+}
+
+// Describes an unsigned SOME/IP bitfield.
+message BitfieldLayout {
+  // Bitfield width in bits; only 8, 16, and 32 are supported.
+  uint32 width_bits = 1;
+  // Named bits explicitly modeled by the interface.
+  repeated NamedBit named_bits = 2;
+  // Whether bits not declared in named_bits are forbidden.
+  bool closed = 3;
+}
+
+// Describes explicit padding in a structured payload.
+message Padding {
+  // Positive number of padding bytes.
+  uint64 byte_count = 1;
+  // Position of the padding within the containing struct.
+  oneof position {
+    // Insert padding immediately before this struct member wire order.
+    uint32 before_wire_order = 2;
+    // Insert padding after the final struct member.
+    bool at_end = 3;
+  }
+}
+
+// Describes a structured message's length-prefix and extensibility behavior.
+message StructLayout {
+  // Width of the struct byte-length prefix.
+  LengthFieldWidth length_field_width = 1;
+  // Whether later versions may append higher wire-order members.
+  bool extensible = 2;
+  // Explicit padding defined by the interface author.
+  repeated Padding padding = 3;
+}
+
+// Describes a proto oneof represented as a SOME/IP union.
+message OneofOptionsSpec {
+  // Wire order of the union in its containing struct.
+  uint32 wire_order = 1;
+  // Width of the union discriminator in bits; only 8, 16, and 32 are supported.
+  uint32 discriminator_width_bits = 2;
+  // Width of the union byte-length prefix.
+  LengthFieldWidth length_field_width = 3;
+  // Order of the discriminator and length prefix.
+  UnionHeaderOrder header_order = 4;
+  // Explicit padding bytes after the union value.
+  uint64 padding_bytes = 5;
+  // Whether an unset protobuf oneof represents the NULL union type ID zero.
+  bool allows_null = 6;
+  // Required maximum encoded size of this union, excluding outer struct padding.
+  uint64 max_encoded_bytes = 7;
+  // Legacy option retained for source compatibility. Union headers are always
+  // big endian; Phase 3 rejects any non-default value.
+  ByteOrder byte_order = 8 [deprecated = true];
+  // Optional documentation URIs for this union declaration.
+  repeated string documentation_uris = 9;
+}
+
+// Describes an enum's SOME/IP representation.
+message EnumOptionsSpec {
+  // Width of the enum representation in bits; only 8, 16, and 32 are supported.
+  uint32 wire_width_bits = 1;
+  // Whether unknown numeric enum values are rejected.
+  bool closed = 2;
+  // Optional documentation URIs for this enum declaration.
+  repeated string documentation_uris = 3;
+}
+
+// Describes a special enum value used only as a protobuf placeholder.
+message EnumValueOptionsSpec {
+  // Marks a required numeric-zero placeholder as non-sendable on the SOME/IP wire.
+  bool non_sendable_placeholder = 1;
+  // Optional documentation URIs for this enum value declaration.
+  repeated string documentation_uris = 2;
+}
+
+// Describes a file's default payload byte order and optional deployment profile.
+message FileOptionsSpec {
+  // Default payload byte order for annotated messages in this file.
+  ByteOrder default_byte_order = 1;
+  // Optional deployment profile declared by this file.
+  DeploymentProfile deployment_profile = 2;
+  // Optional documentation URIs for this source file.
+  repeated string documentation_uris = 3;
+}
+
+// Describes a SOME/IP interface declared by a proto service.
+message ServiceOptionsSpec {
+  // SOME/IP interface major version.
+  uint32 interface_major_version = 1;
+  // SOME/IP interface minor version.
+  uint32 interface_minor_version = 2;
+  // Events owned by this service.
+  repeated Event events = 3;
+  // Fields owned by this service.
+  repeated ServiceField fields = 4;
+  // Named event groups owned by this service.
+  repeated EventGroup event_groups = 5;
+  // Immutable lineage shared by different service-major protobuf definitions.
+  ServiceLineage service_lineage = 6;
+  // Optional documentation URIs for this service declaration.
+  repeated string documentation_uris = 7;
+}
+
+// Describes a SOME/IP method declared by a proto RPC.
+message MethodOptionsSpec {
+  // SOME/IP member identifier.
+  uint32 member_id = 1;
+  // Request/response or fire-and-forget method form.
+  MethodKind kind = 2;
+  // Declared generic or application-specific non-OK return codes.
+  repeated ReturnCode return_codes = 3;
+  // Leading-dot fully qualified protobuf name of the optional exception payload.
+  ProtobufReference exception_payload_type = 4;
+  // Policy for transporting non-OK method results.
+  ResponsePolicy response_policy = 5;
+  // Optional method timing metadata.
+  MethodTiming timing = 6;
+  // Optional documentation URIs for this RPC declaration.
+  repeated string documentation_uris = 7;
+}
+
+// Describes a serializable protobuf message's SOME/IP struct behavior.
+message MessageOptionsSpec {
+  // Optional payload byte-order override.
+  ByteOrder byte_order = 1;
+  // Struct length-prefix, extensibility, and padding metadata.
+  StructLayout struct_layout = 2;
+  // Optional documentation URIs for this payload declaration.
+  repeated string documentation_uris = 3;
+}
+
+// Describes a serializable protobuf field's SOME/IP layout and domain.
+message FieldOptionsSpec {
+  // Contiguous wire order in the containing struct, or zero for a oneof alternative.
+  uint32 wire_order = 1;
+  // Optional payload byte-order override.
+  ByteOrder byte_order = 2;
+  // Required SOME/IP representation for scalar and enum protobuf fields.
+  ScalarRepresentation scalar_representation = 3;
+  // Array metadata for repeated fields and byte arrays.
+  ArrayLayout array = 4;
+  // String metadata for protobuf string fields.
+  StringLayout string = 5;
+  // Bitfield metadata for supported unsigned scalar fields.
+  BitfieldLayout bitfield = 6;
+  // Optional unit, scaling, and range metadata.
+  ValueDomain domain = 7;
+  // Whether this member is an optional SOME/IP element encoded as a zero-or-one array.
+  bool optional_element = 8;
+  // Required union type ID for a field that is an alternative of a protobuf oneof.
+  uint32 union_type_id = 9;
+  // Required maximum encoded size for dynamic structs, unions, and variable-element arrays.
+  uint64 max_encoded_bytes = 10;
+  // Required alignment in bytes, limited to 1, 2, 4, or 8.
+  uint32 alignment_bytes = 11;
+  // Explicit padding after this union alternative's encoded value. For a
+  // length-prefixed union, this padding contributes to the declared value extent.
+  uint64 union_padding_bytes = 12;
+  // Optional documentation URIs for this payload member declaration.
+  repeated string documentation_uris = 13;
+}

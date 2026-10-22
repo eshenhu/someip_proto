@@ -1,0 +1,16 @@
+load("//bazel/rules:buf_descriptor.bzl", "buf_descriptor", "descriptor_smoke_test")
+
+buf_descriptor(
+    name = "minimal_descriptor",
+    module = "bazel/rules/testdata/minimal_module",
+    srcs = glob(["minimal_module/**/*.proto"]) + ["minimal_module/buf.yaml"],
+)
+
+descriptor_smoke_test(
+    name = "descriptor_smoke_test",
+    descriptor = ":minimal_descriptor",
+    expected_strings = [
+        "Descriptor bridge smoke fixture.",
+        "google/protobuf/empty.proto",
+    ],
+)

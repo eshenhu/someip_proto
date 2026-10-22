@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package io.github.someip_proto.test.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/test/v1alpha1;testv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {
+  default_byte_order: BYTE_ORDER_BIG_ENDIAN
+  deployment_profile: {
+    profile_name: "phase-2-1-invalid"
+    version: {major: 1}
+    udp_application_payload_budget_bytes: 1400
+    provider_instances: {
+      service_id: 12817
+      instance_id: 1
+      provider_name: "fixture.invalid-provider"
+      endpoints: {
+        name: "primary"
+        address: "192.0.2.11"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30501
+      }
+      default_endpoint_name: "primary"
+      service_lineage: {id: "fixture.lighting"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.PhaseTwoOneV1Service"}
+        interface_major_version: 1
+      }
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.PhaseTwoOneV1Service"}
+        interface_major_version: 1
+      }
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.PhaseTwoOneForeignService"}
+        interface_major_version: 1
+      }
+    }
+  }
+};
+
+// Request payload for the reserved-ID service fixture.
+message PhaseTwoOneReservedIdentifierServiceSetRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Response payload for the reserved-ID service fixture.
+message PhaseTwoOneReservedIdentifierServiceSetResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 accepted_value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Exercises reserved 16-bit member-ID validation.
+service PhaseTwoOneReservedIdentifierService {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "fixture.reserved-id"}
+  };
+
+  rpc Set(PhaseTwoOneReservedIdentifierServiceSetRequest) returns (PhaseTwoOneReservedIdentifierServiceSetResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 0
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}

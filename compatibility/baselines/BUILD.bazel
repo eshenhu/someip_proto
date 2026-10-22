@@ -1,0 +1,6 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "v0_1_0_smart_workshop_lighting_artifacts",
+    srcs = glob(["v0.1.0/smart-workshop-lighting/**"]),
+)

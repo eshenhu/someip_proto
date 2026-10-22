@@ -1,0 +1,42 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "descriptor",
+    srcs = [
+        "dependency_provenance.go",
+        "limits.go",
+        "loader.go",
+        "location.go",
+        "options.go",
+    ],
+    importpath = "github.com/eshenhu/someip_proto/internal/descriptor",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "@org_golang_google_protobuf//encoding/protowire:go_default_library",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protodesc:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoregistry:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    ],
+)
+
+go_test(
+    name = "descriptor_test",
+    srcs = [
+        "fuzz_test.go",
+        "loader_test.go",
+    ],
+    data = glob(["testdata/**"]),
+    embed = [":descriptor"],
+    deps = [
+        "//gen/go/io/github/someip_proto/test/v1alpha1",
+        "//internal/testutil",
+        "@org_golang_google_protobuf//proto:go_default_library",
+        "@org_golang_google_protobuf//reflect/protodesc:go_default_library",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//types/descriptorpb:go_default_library",
+    ],
+)

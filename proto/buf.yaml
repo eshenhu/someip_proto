@@ -1,0 +1,22 @@
+version: v2
+modules:
+  - path: .
+    name: buf.build/eshenhu/someip_proto
+lint:
+  use:
+    - STANDARD
+  # The stable options facade deliberately re-exports the split public schema
+  # so external authors retain one import path.
+  ignore_only:
+    IMPORT_NO_PUBLIC:
+      - io/github/someip_proto/options/v1alpha1/someip_options.proto
+  # The deployment option stores its service reference as an FQN string. Keep
+  # this import so a descriptor built from the deployment has a closed service
+  # definition closure; protobuf syntax cannot otherwise express that edge.
+    IMPORT_USED:
+      - io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto
+      - io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto
+breaking:
+  use:
+    - FILE
+  ignore_unstable_packages: true

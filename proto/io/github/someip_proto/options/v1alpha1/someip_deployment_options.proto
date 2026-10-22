@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package io.github.someip_proto.options.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_common_options.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_sd_options.proto";
+import "io/github/someip_proto/options/v1alpha1/someip_tp_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/options/v1alpha1;optionsv1alpha1";
+
+// Binds one declared service major version to a provider identity.
+message ServiceVersionBinding {
+  // Leading-dot fully qualified protobuf name of the service definition.
+  ProtobufReference service = 1;
+  // Interface major version declared by service.
+  uint32 interface_major_version = 2;
+  // Optional endpoint overrides for members of this service version.
+  repeated MemberEndpointOverride member_endpoint_overrides = 3;
+  // Static SOME/IP Service Discovery offer configuration.
+  ServiceDiscoveryOffer service_discovery_offer = 4;
+  // Provider-authored TP capability declarations for dispatchable members.
+  repeated MemberTpConfiguration member_tp_configurations = 5;
+}
+
+// Describes one shared provider identity in a deployment profile.
+message ProviderInstance {
+  // Legacy single-service reference retained for source compatibility. Phase 3
+  // rejects it as semantic input; use service_lineage and service_version_bindings.
+  ProtobufReference service = 1 [deprecated = true];
+
+  // Profile-specific SOME/IP service identifier.
+  uint32 service_id = 2;
+  // Profile-specific SOME/IP instance identifier.
+  uint32 instance_id = 3;
+  // Profile-unique provider name.
+  string provider_name = 4;
+  // Local endpoints offered by this provider instance.
+  repeated Endpoint endpoints = 5;
+  // Name of the default endpoint declared in endpoints.
+  string default_endpoint_name = 6;
+  // Legacy direct overrides retained for source compatibility. Phase 3 rejects
+  // them as semantic input; use binding-owned member_endpoint_overrides.
+  repeated MemberEndpointOverride member_endpoint_overrides = 7 [deprecated = true];
+  // Immutable lineage served by this provider identity.
+  ServiceLineage service_lineage = 8;
+  // Ordered service-major versions sharing this provider identity.
+  repeated ServiceVersionBinding service_version_bindings = 9;
+}
+
+// Describes one consumer binding to a statically selected provider service
+// major. Consumers inherit the selected provider TP contract and declare no TP
+// configuration of their own.
+message ConsumerServiceBinding {
+  // Profile-unique consumer name.
+  string consumer_name = 1;
+  // Leading-dot fully qualified protobuf name of the target service.
+  ProtobufReference service = 2;
+  // Immutable lineage expected by the consumer.
+  ServiceLineage service_lineage = 3;
+  // Interface major version expected by the consumer.
+  uint32 interface_major_version = 4;
+  // Exact or wildcard provider selector.
+  ProviderSelector provider_selector = 5;
+  // Local consumer endpoints.
+  repeated ConsumerEndpoint local_endpoints = 6;
+  // Optional endpoint overrides for individual dispatchable members.
+  repeated MemberEndpointOverride member_endpoint_overrides = 7;
+  // Requested event-group subscriptions.
+  repeated Subscription subscriptions = 8;
+  // TTL-only or complete Service Discovery find timing.
+  ServiceDiscoveryTiming find_timing = 9;
+  // Name of the default endpoint declared in local_endpoints. It supplies the
+  // effective local endpoint for members without an explicit override.
+  string default_endpoint_name = 10;
+}
+
+// Describes one closed, static deployment profile.
+message DeploymentProfile {
+  // Lowercase ASCII profile name.
+  string profile_name = 1;
+  // Profile semantic version.
+  SemanticVersion version = 2;
+  // Maximum unsegmented UDP application payload size, excluding the SOME/IP header.
+  uint64 udp_application_payload_budget_bytes = 3;
+  // Provider service instances that comprise the complete profile.
+  repeated ProviderInstance provider_instances = 4;
+  // Consumer bindings that comprise the complete profile.
+  repeated ConsumerServiceBinding consumer_bindings = 5;
+}

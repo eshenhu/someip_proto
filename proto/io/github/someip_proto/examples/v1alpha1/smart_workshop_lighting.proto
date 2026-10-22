@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package io.github.someip_proto.examples.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/examples/v1alpha1;examplesv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {default_byte_order: BYTE_ORDER_BIG_ENDIAN};
+
+// Selects a non-normative lighting scene for the SmartWorkshopLighting example.
+enum LightingMode {
+  option (io.github.someip_proto.options.v1alpha1.enum) = {wire_width_bits: 8};
+
+  LIGHTING_MODE_UNSPECIFIED = 0 [(io.github.someip_proto.options.v1alpha1.enum_value) = {non_sendable_placeholder: true}];
+  LIGHTING_MODE_WORK = 1;
+  LIGHTING_MODE_INSPECTION = 2;
+}
+
+// Carries the complete observable state of the workshop lighting.
+message LightingState {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  // Current brightness from 0 through 100 percent.
+  uint32 brightness_percent = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+  // Current lighting scene.
+  LightingMode mode = 2 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 2
+    scalar_representation: SCALAR_REPRESENTATION_ENUM_8
+  }];
+}
+
+// Carries the desired workshop-lighting state for SetLightingState.
+message SetLightingStateRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  // Desired new lighting state.
+  LightingState desired_state = 1 [(io.github.someip_proto.options.v1alpha1.field) = {wire_order: 1}];
+}
+
+// Carries the accepted workshop-lighting state from SetLightingState.
+message SetLightingStateResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  // State accepted by the provider.
+  LightingState accepted_state = 1 [(io.github.someip_proto.options.v1alpha1.field) = {wire_order: 1}];
+}
+
+// Demonstrates a static SOME/IP workshop-lighting interface and its event,
+// event-group, payload, and deployment metadata.
+service SmartWorkshopLightingService {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "smart-workshop-lighting"}
+    event_groups: {
+      name: "lighting_updates"
+      id: 1
+    }
+    events: {
+      name: "lighting_state_changed"
+      id: 0x8001
+      payload_type: {fqn: ".io.github.someip_proto.examples.v1alpha1.LightingState"}
+      event_group_names: "lighting_updates"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+    fields: {
+      name: "lighting_state"
+      value_type: {fqn: ".io.github.someip_proto.examples.v1alpha1.LightingState"}
+      notifier_id: 0x8002
+      event_group_names: "lighting_updates"
+      publication: {kind: PUBLICATION_POLICY_KIND_ON_CHANGE}
+    }
+  };
+
+  // Changes the complete lighting state.
+  rpc SetLightingState(SetLightingStateRequest) returns (SetLightingStateResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}

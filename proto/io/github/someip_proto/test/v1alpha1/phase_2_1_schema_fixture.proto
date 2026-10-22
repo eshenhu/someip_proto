@@ -1,0 +1,296 @@
+syntax = "proto3";
+
+package io.github.someip_proto.test.v1alpha1;
+
+import "io/github/someip_proto/options/v1alpha1/someip_options.proto";
+
+option go_package = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/test/v1alpha1;testv1alpha1";
+option (io.github.someip_proto.options.v1alpha1.file) = {
+  default_byte_order: BYTE_ORDER_BIG_ENDIAN
+  deployment_profile: {
+    profile_name: "phase-2-1-valid"
+    version: {major: 1}
+    udp_application_payload_budget_bytes: 1400
+    provider_instances: {
+      service_id: 12816
+      instance_id: 1
+      provider_name: "fixture.provider"
+      endpoints: {
+        name: "primary"
+        address: "192.0.2.10"
+        transport: TRANSPORT_PROTOCOL_UDP
+        port: 30500
+      }
+      default_endpoint_name: "primary"
+      service_lineage: {id: "fixture.lighting"}
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.PhaseTwoOneV1Service"}
+        interface_major_version: 1
+        member_endpoint_overrides: {
+          member_id: 1
+          endpoint_name: "primary"
+        }
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: false
+        }
+      }
+      service_version_bindings: {
+        service: {fqn: ".io.github.someip_proto.test.v1alpha1.PhaseTwoOneV2Service"}
+        interface_major_version: 2
+        member_endpoint_overrides: {
+          member_id: 1
+          endpoint_name: "primary"
+        }
+        member_tp_configurations: {
+          member_id: 1
+          tp_when_needed: false
+        }
+      }
+    }
+  }
+};
+
+// Exercises zero-width unions with unequal fixed-size alternatives.
+message UnequalFixedZeroWidthUnion {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  oneof value {
+    option (io.github.someip_proto.options.v1alpha1.oneof) = {
+      wire_order: 1
+      discriminator_width_bits: 8
+      length_field_width: LENGTH_FIELD_WIDTH_NONE
+      header_order: UNION_HEADER_ORDER_TYPE_THEN_LENGTH
+      max_encoded_bytes: 3
+    };
+
+    uint32 one_byte = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+      scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+      union_type_id: 1
+    }];
+    uint32 two_bytes = 2 [(io.github.someip_proto.options.v1alpha1.field) = {
+      scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_16
+      union_type_id: 2
+    }];
+  }
+}
+
+// Exercises a zero-width union with a bounded dynamic alternative.
+message BoundedDynamicZeroWidthUnion {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  oneof value {
+    option (io.github.someip_proto.options.v1alpha1.oneof) = {
+      wire_order: 1
+      discriminator_width_bits: 8
+      length_field_width: LENGTH_FIELD_WIDTH_NONE
+      header_order: UNION_HEADER_ORDER_TYPE_THEN_LENGTH
+      max_encoded_bytes: 9
+    };
+
+    string dynamic_value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+      string: {
+        encoding: STRING_ENCODING_UTF8
+        length_field_width: LENGTH_FIELD_WIDTH_8
+        max_encoded_bytes: 8
+      }
+      union_type_id: 1
+      max_encoded_bytes: 8
+    }];
+    uint32 scalar_value = 2 [(io.github.someip_proto.options.v1alpha1.field) = {
+      scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+      union_type_id: 2
+    }];
+  }
+}
+
+// Exercises length-prefixed union alternative padding.
+message LengthPrefixedUnionPadding {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  oneof value {
+    option (io.github.someip_proto.options.v1alpha1.oneof) = {
+      wire_order: 1
+      discriminator_width_bits: 8
+      length_field_width: LENGTH_FIELD_WIDTH_16
+      header_order: UNION_HEADER_ORDER_TYPE_THEN_LENGTH
+      max_encoded_bytes: 7
+    };
+
+    uint32 padded_byte = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+      scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+      union_type_id: 1
+      union_padding_bytes: 3
+    }];
+    uint32 word = 2 [(io.github.someip_proto.options.v1alpha1.field) = {
+      scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+      union_type_id: 2
+    }];
+  }
+}
+
+// Exercises the normative warning for a layout that is not provably aligned.
+message AlignmentWarningPayload {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 leading_byte = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8
+  }];
+  uint32 following_word = 2 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 2
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+    alignment_bytes: 4
+  }];
+}
+
+// Exercises normalized enum wire/value metadata.
+enum PhaseTwoOneMode {
+  option (io.github.someip_proto.options.v1alpha1.enum) = {wire_width_bits: 8};
+
+  PHASE_TWO_ONE_MODE_UNSPECIFIED = 0 [(io.github.someip_proto.options.v1alpha1.enum_value) = {non_sendable_placeholder: true}];
+  PHASE_TWO_ONE_MODE_ENABLED = 1;
+}
+
+// Exercises enum payload analysis and manifest materialization.
+message PhaseTwoOneEnumPayload {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  PhaseTwoOneMode mode = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_ENUM_8
+  }];
+}
+
+// Request payload for the first versioned service fixture.
+message PhaseTwoOneV1ServiceSetRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Response payload for the first versioned service fixture.
+message PhaseTwoOneV1ServiceSetResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 accepted_value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Request payload for the second versioned service fixture.
+message PhaseTwoOneV2ServiceSetRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Response payload for the second versioned service fixture.
+message PhaseTwoOneV2ServiceSetResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 accepted_value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Request payload for the unrelated service fixture.
+message PhaseTwoOneForeignServiceSetRequest {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// Response payload for the unrelated service fixture.
+message PhaseTwoOneForeignServiceSetResponse {
+  option (io.github.someip_proto.options.v1alpha1.message) = {
+    struct_layout: {length_field_width: LENGTH_FIELD_WIDTH_NONE}
+  };
+
+  uint32 accepted_value = 1 [(io.github.someip_proto.options.v1alpha1.field) = {
+    wire_order: 1
+    scalar_representation: SCALAR_REPRESENTATION_UNSIGNED_INTEGER_32
+  }];
+}
+
+// First incompatible major version in the fixture lineage.
+service PhaseTwoOneV1Service {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "fixture.lighting"}
+  };
+
+  rpc Set(PhaseTwoOneV1ServiceSetRequest) returns (PhaseTwoOneV1ServiceSetResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}
+
+// Second incompatible major version in the fixture lineage.
+service PhaseTwoOneV2Service {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 2
+    interface_minor_version: 0
+    service_lineage: {id: "fixture.lighting"}
+  };
+
+  rpc Set(PhaseTwoOneV2ServiceSetRequest) returns (PhaseTwoOneV2ServiceSetResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}
+
+// Unrelated service used by the invalid provider-identity fixture.
+service PhaseTwoOneForeignService {
+  option (io.github.someip_proto.options.v1alpha1.service) = {
+    interface_major_version: 1
+    interface_minor_version: 0
+    service_lineage: {id: "fixture.foreign"}
+  };
+
+  rpc Set(PhaseTwoOneForeignServiceSetRequest) returns (PhaseTwoOneForeignServiceSetResponse) {
+    option (io.github.someip_proto.options.v1alpha1.method) = {
+      member_id: 1
+      kind: METHOD_KIND_REQUEST_RESPONSE
+      response_policy: RESPONSE_POLICY_RESPONSE_ONLY
+    };
+  }
+}
