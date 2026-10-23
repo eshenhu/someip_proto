@@ -1,0 +1,1274 @@
+{
+  "provenance": {
+    "manifest_format_version": 1,
+    "options_api_version": "v1alpha1",
+    "input_fds_sha256": "08e8ba485f2f2143d4648abd5f445594634ca06ad59d81c4f91803a04ba65aea",
+    "tool_version": "v0.1.0",
+    "source_revision": "v0.1.0",
+    "normative_source_commit": "94e4ea932e50273897a014bc57f7ae89f1816b84"
+  },
+  "profile": {
+    "profile_name": "smart-workshop-lighting-sd-tp",
+    "version": {
+      "major": 1
+    },
+    "udp_application_payload_budget_bytes": "1400",
+    "provider_instances": [
+      {
+        "instance": {
+          "service_id": 18961,
+          "instance_id": 1,
+          "provider_name": "smart-workshop-lighting-sd-tp",
+          "endpoints": [
+            {
+              "name": "provider-udp",
+              "address": "192.0.2.30",
+              "transport": "TRANSPORT_PROTOCOL_UDP",
+              "port": 30500
+            }
+          ],
+          "default_endpoint_name": "provider-udp",
+          "service_lineage": {
+            "id": "smart-workshop-lighting-sd-tp"
+          },
+          "service_version_bindings": [
+            {
+              "service": {
+                "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"
+              },
+              "interface_major_version": 1,
+              "service_discovery_offer": {
+                "endpoint_names": [
+                  "provider-udp"
+                ],
+                "timing": {
+                  "live_ttl_seconds": 16777215,
+                  "initial_delay": {
+                    "minimum": "0s",
+                    "maximum": "0.010s"
+                  },
+                  "repetitions_base_delay": "0.010s",
+                  "repetitions_max": 3,
+                  "request_response_delay": {
+                    "minimum": "0s",
+                    "maximum": "0.005s"
+                  },
+                  "cyclic_offer_delay": "1s"
+                },
+                "event_group_delivery_policies": [
+                  {
+                    "event_group_name": "multicast_previews",
+                    "mode": "EVENT_GROUP_DELIVERY_MODE_MULTICAST",
+                    "multicast_endpoint": {
+                      "address": "239.192.0.1",
+                      "port": 30502
+                    }
+                  },
+                  {
+                    "event_group_name": "unicast_snapshots",
+                    "mode": "EVENT_GROUP_DELIVERY_MODE_UNICAST"
+                  }
+                ]
+              },
+              "member_tp_configurations": [
+                {
+                  "member_id": 1,
+                  "tp_when_needed": true
+                },
+                {
+                  "member_id": 2
+                },
+                {
+                  "member_id": 32769,
+                  "tp_when_needed": true
+                },
+                {
+                  "member_id": 32770,
+                  "tp_when_needed": true
+                }
+              ]
+            }
+          ]
+        },
+        "maximum_application_payload_bytes": "1502",
+        "maximum_someip_message_bytes": "1518",
+        "location": {
+          "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto",
+          "line": 9,
+          "column": 1
+        },
+        "service_version_bindings": [
+          {
+            "binding": {
+              "service": {
+                "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"
+              },
+              "interface_major_version": 1,
+              "service_discovery_offer": {
+                "endpoint_names": [
+                  "provider-udp"
+                ],
+                "timing": {
+                  "live_ttl_seconds": 16777215,
+                  "initial_delay": {
+                    "minimum": "0s",
+                    "maximum": "0.010s"
+                  },
+                  "repetitions_base_delay": "0.010s",
+                  "repetitions_max": 3,
+                  "request_response_delay": {
+                    "minimum": "0s",
+                    "maximum": "0.005s"
+                  },
+                  "cyclic_offer_delay": "1s"
+                },
+                "event_group_delivery_policies": [
+                  {
+                    "event_group_name": "multicast_previews",
+                    "mode": "EVENT_GROUP_DELIVERY_MODE_MULTICAST",
+                    "multicast_endpoint": {
+                      "address": "239.192.0.1",
+                      "port": 30502
+                    }
+                  },
+                  {
+                    "event_group_name": "unicast_snapshots",
+                    "mode": "EVENT_GROUP_DELIVERY_MODE_UNICAST"
+                  }
+                ]
+              },
+              "member_tp_configurations": [
+                {
+                  "member_id": 1,
+                  "tp_when_needed": true
+                },
+                {
+                  "member_id": 2
+                },
+                {
+                  "member_id": 32769,
+                  "tp_when_needed": true
+                },
+                {
+                  "member_id": 32770,
+                  "tp_when_needed": true
+                }
+              ]
+            },
+            "service_lineage": {
+              "id": "smart-workshop-lighting-sd-tp"
+            },
+            "maximum_application_payload_bytes": "1502",
+            "maximum_someip_message_bytes": "1518",
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto",
+              "line": 9,
+              "column": 1
+            },
+            "service_discovery_offer": {
+              "endpoint_names": [
+                "provider-udp"
+              ],
+              "timing": {
+                "live_ttl_seconds": 16777215,
+                "initial_delay": {
+                  "minimum": "0s",
+                  "maximum": "0.010s"
+                },
+                "repetitions_base_delay": "0.010s",
+                "repetitions_max": 3,
+                "request_response_delay": {
+                  "minimum": "0s",
+                  "maximum": "0.005s"
+                },
+                "cyclic_offer_delay": "1s"
+              },
+              "event_group_delivery_policies": [
+                {
+                  "event_group_name": "multicast_previews",
+                  "mode": "EVENT_GROUP_DELIVERY_MODE_MULTICAST",
+                  "multicast_endpoint": {
+                    "address": "239.192.0.1",
+                    "port": 30502
+                  }
+                },
+                {
+                  "event_group_name": "unicast_snapshots",
+                  "mode": "EVENT_GROUP_DELIVERY_MODE_UNICAST"
+                }
+              ]
+            },
+            "event_group_delivery_policies": [
+              {
+                "event_group_name": "multicast_previews",
+                "mode": "EVENT_GROUP_DELIVERY_MODE_MULTICAST",
+                "multicast_endpoint": {
+                  "address": "239.192.0.1",
+                  "port": 30502
+                }
+              },
+              {
+                "event_group_name": "unicast_snapshots",
+                "mode": "EVENT_GROUP_DELIVERY_MODE_UNICAST"
+              }
+            ],
+            "member_tp_configurations": [
+              {
+                "member_id": 1,
+                "tp_when_needed": true
+              },
+              {
+                "member_id": 2
+              },
+              {
+                "member_id": 32769,
+                "tp_when_needed": true
+              },
+              {
+                "member_id": 32770,
+                "tp_when_needed": true
+              }
+            ],
+            "member_tp_analysis": [
+              {
+                "member_id": 1,
+                "tp_when_needed": true,
+                "directions": [
+                  {
+                    "direction": "MEMBER_DIRECTION_REQUEST",
+                    "encoded_size": {
+                      "minimum_bytes": "1",
+                      "exact_bytes": "1",
+                      "maximum_bytes": "1"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "tp_when_needed": true,
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_NEVER_NEEDED"
+                  },
+                  {
+                    "direction": "MEMBER_DIRECTION_RESPONSE",
+                    "encoded_size": {
+                      "minimum_bytes": "2",
+                      "exact_bytes": "2",
+                      "maximum_bytes": "2"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "tp_when_needed": true,
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_NEVER_NEEDED"
+                  }
+                ]
+              },
+              {
+                "member_id": 2,
+                "directions": [
+                  {
+                    "direction": "MEMBER_DIRECTION_REQUEST",
+                    "encoded_size": {
+                      "minimum_bytes": "2",
+                      "exact_bytes": "2",
+                      "maximum_bytes": "2"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_TP_NOT_CONFIGURED"
+                  },
+                  {
+                    "direction": "MEMBER_DIRECTION_RESPONSE",
+                    "encoded_size": {
+                      "minimum_bytes": "2",
+                      "exact_bytes": "2",
+                      "maximum_bytes": "2"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_TP_NOT_CONFIGURED"
+                  }
+                ]
+              },
+              {
+                "member_id": 32769,
+                "tp_when_needed": true,
+                "directions": [
+                  {
+                    "direction": "MEMBER_DIRECTION_NOTIFICATION",
+                    "encoded_size": {
+                      "minimum_bytes": "2",
+                      "maximum_bytes": "1502"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "tp_when_needed": true,
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_MAY_BE_NEEDED",
+                    "runtime_tp_session_handling_required": true
+                  }
+                ]
+              },
+              {
+                "member_id": 32770,
+                "tp_when_needed": true,
+                "directions": [
+                  {
+                    "direction": "MEMBER_DIRECTION_NOTIFICATION",
+                    "encoded_size": {
+                      "minimum_bytes": "1500",
+                      "exact_bytes": "1500",
+                      "maximum_bytes": "1500"
+                    },
+                    "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                    "endpoint": {
+                      "endpoint_name": "provider-udp",
+                      "address": "192.0.2.30",
+                      "transport": "TRANSPORT_PROTOCOL_UDP",
+                      "fixed_port": 30500
+                    },
+                    "tp_when_needed": true,
+                    "unsegmented_udp_payload_budget_bytes": "1400",
+                    "tp_use_result": "TP_USE_RESULT_REQUIRED",
+                    "runtime_tp_session_handling_required": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "location": {
+      "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto",
+      "line": 9,
+      "column": 1
+    },
+    "consumer_bindings": [
+      {
+        "binding": {
+          "consumer_name": "smart-workshop-lighting-dashboard",
+          "service": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"
+          },
+          "service_lineage": {
+            "id": "smart-workshop-lighting-sd-tp"
+          },
+          "interface_major_version": 1,
+          "provider_selector": {
+            "named_provider_name": "smart-workshop-lighting-sd-tp"
+          },
+          "local_endpoints": [
+            {
+              "name": "dashboard-udp",
+              "address": "192.0.2.40",
+              "transport": "TRANSPORT_PROTOCOL_UDP",
+              "dynamic_port_range": {
+                "minimum_port": 30510,
+                "maximum_port": 30520
+              }
+            }
+          ],
+          "subscriptions": [
+            {
+              "event_group_name": "multicast_previews",
+              "ttl_seconds": 10
+            },
+            {
+              "event_group_name": "unicast_snapshots",
+              "ttl_seconds": 10,
+              "local_endpoint_names": [
+                "dashboard-udp"
+              ],
+              "request_initial_data": true
+            }
+          ],
+          "find_timing": {
+            "live_ttl_seconds": 10,
+            "initial_delay": {
+              "minimum": "0s",
+              "maximum": "0.010s"
+            },
+            "repetitions_base_delay": "0.010s",
+            "repetitions_max": 1,
+            "request_response_delay": {
+              "minimum": "0s",
+              "maximum": "0.005s"
+            },
+            "cyclic_offer_delay": "1s"
+          },
+          "default_endpoint_name": "dashboard-udp"
+        },
+        "provider_selector": {
+          "selector": {
+            "named_provider_name": "smart-workshop-lighting-sd-tp"
+          },
+          "candidates": [
+            {
+              "provider_name": "smart-workshop-lighting-sd-tp",
+              "service_id": 18961,
+              "instance_id": 1,
+              "service": {
+                "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"
+              },
+              "interface_major_version": 1,
+              "service_lineage": {
+                "id": "smart-workshop-lighting-sd-tp"
+              }
+            }
+          ]
+        },
+        "local_endpoints": [
+          {
+            "name": "dashboard-udp",
+            "address": "192.0.2.40",
+            "transport": "TRANSPORT_PROTOCOL_UDP",
+            "dynamic_port_range": {
+              "minimum_port": 30510,
+              "maximum_port": 30520
+            }
+          }
+        ],
+        "find_timing": {
+          "live_ttl_seconds": 10,
+          "initial_delay": {
+            "minimum": "0s",
+            "maximum": "0.010s"
+          },
+          "repetitions_base_delay": "0.010s",
+          "repetitions_max": 1,
+          "request_response_delay": {
+            "minimum": "0s",
+            "maximum": "0.005s"
+          },
+          "cyclic_offer_delay": "1s"
+        },
+        "subscriptions": [
+          {
+            "subscription": {
+              "event_group_name": "multicast_previews",
+              "ttl_seconds": 10
+            },
+            "event_group_id": 2,
+            "delivery_policy": {
+              "event_group_name": "multicast_previews",
+              "mode": "EVENT_GROUP_DELIVERY_MODE_MULTICAST",
+              "multicast_endpoint": {
+                "address": "239.192.0.1",
+                "port": 30502
+              }
+            }
+          },
+          {
+            "subscription": {
+              "event_group_name": "unicast_snapshots",
+              "ttl_seconds": 10,
+              "local_endpoint_names": [
+                "dashboard-udp"
+              ],
+              "request_initial_data": true
+            },
+            "event_group_id": 1,
+            "delivery_policy": {
+              "event_group_name": "unicast_snapshots",
+              "mode": "EVENT_GROUP_DELIVERY_MODE_UNICAST"
+            },
+            "initial_data_requested": true
+          }
+        ],
+        "location": {
+          "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp_deployment.proto",
+          "line": 9,
+          "column": 1
+        },
+        "inherited_member_tp_analysis": [
+          {
+            "member_id": 1,
+            "tp_when_needed": true,
+            "directions": [
+              {
+                "direction": "MEMBER_DIRECTION_REQUEST",
+                "encoded_size": {
+                  "minimum_bytes": "1",
+                  "exact_bytes": "1",
+                  "maximum_bytes": "1"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "dashboard-udp",
+                  "address": "192.0.2.40",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "dynamic_port_range": {
+                    "minimum_port": 30510,
+                    "maximum_port": 30520
+                  }
+                },
+                "tp_when_needed": true,
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_NEVER_NEEDED"
+              },
+              {
+                "direction": "MEMBER_DIRECTION_RESPONSE",
+                "encoded_size": {
+                  "minimum_bytes": "2",
+                  "exact_bytes": "2",
+                  "maximum_bytes": "2"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "provider-udp",
+                  "address": "192.0.2.30",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "fixed_port": 30500
+                },
+                "tp_when_needed": true,
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_NEVER_NEEDED"
+              }
+            ]
+          },
+          {
+            "member_id": 2,
+            "directions": [
+              {
+                "direction": "MEMBER_DIRECTION_REQUEST",
+                "encoded_size": {
+                  "minimum_bytes": "2",
+                  "exact_bytes": "2",
+                  "maximum_bytes": "2"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "dashboard-udp",
+                  "address": "192.0.2.40",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "dynamic_port_range": {
+                    "minimum_port": 30510,
+                    "maximum_port": 30520
+                  }
+                },
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_TP_NOT_CONFIGURED"
+              },
+              {
+                "direction": "MEMBER_DIRECTION_RESPONSE",
+                "encoded_size": {
+                  "minimum_bytes": "2",
+                  "exact_bytes": "2",
+                  "maximum_bytes": "2"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "provider-udp",
+                  "address": "192.0.2.30",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "fixed_port": 30500
+                },
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_TP_NOT_CONFIGURED"
+              }
+            ]
+          },
+          {
+            "member_id": 32769,
+            "tp_when_needed": true,
+            "directions": [
+              {
+                "direction": "MEMBER_DIRECTION_NOTIFICATION",
+                "encoded_size": {
+                  "minimum_bytes": "2",
+                  "maximum_bytes": "1502"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "provider-udp",
+                  "address": "192.0.2.30",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "fixed_port": 30500
+                },
+                "tp_when_needed": true,
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_MAY_BE_NEEDED",
+                "runtime_tp_session_handling_required": true
+              }
+            ]
+          },
+          {
+            "member_id": 32770,
+            "tp_when_needed": true,
+            "directions": [
+              {
+                "direction": "MEMBER_DIRECTION_NOTIFICATION",
+                "encoded_size": {
+                  "minimum_bytes": "1500",
+                  "exact_bytes": "1500",
+                  "maximum_bytes": "1500"
+                },
+                "effective_transport": "EFFECTIVE_TRANSPORT_CLASSIFICATION_UDP",
+                "endpoint": {
+                  "endpoint_name": "provider-udp",
+                  "address": "192.0.2.30",
+                  "transport": "TRANSPORT_PROTOCOL_UDP",
+                  "fixed_port": 30500
+                },
+                "tp_when_needed": true,
+                "unsegmented_udp_payload_budget_bytes": "1400",
+                "tp_use_result": "TP_USE_RESULT_REQUIRED",
+                "runtime_tp_session_handling_required": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "services": [
+    {
+      "service": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPService"
+      },
+      "interface_major_version": 1,
+      "members": [
+        {
+          "name": "GetLightingState",
+          "member_id": 1,
+          "kind": "method",
+          "request_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceGetLightingStateRequest"
+          },
+          "response_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceGetLightingStateResponse"
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+            "line": 113,
+            "column": 3
+          },
+          "method_options": {
+            "member_id": 1,
+            "kind": "METHOD_KIND_REQUEST_RESPONSE",
+            "response_policy": "RESPONSE_POLICY_RESPONSE_ONLY"
+          },
+          "directional_payloads": [
+            {
+              "direction": "MEMBER_DIRECTION_REQUEST",
+              "encoded_size": {
+                "minimum_bytes": "1",
+                "exact_bytes": "1",
+                "maximum_bytes": "1"
+              }
+            },
+            {
+              "direction": "MEMBER_DIRECTION_RESPONSE",
+              "encoded_size": {
+                "minimum_bytes": "2",
+                "exact_bytes": "2",
+                "maximum_bytes": "2"
+              }
+            }
+          ]
+        },
+        {
+          "name": "SetLightingState",
+          "member_id": 2,
+          "kind": "method",
+          "request_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceSetLightingStateRequest"
+          },
+          "response_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceSetLightingStateResponse"
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+            "line": 122,
+            "column": 3
+          },
+          "method_options": {
+            "member_id": 2,
+            "kind": "METHOD_KIND_REQUEST_RESPONSE",
+            "response_policy": "RESPONSE_POLICY_RESPONSE_ONLY"
+          },
+          "directional_payloads": [
+            {
+              "direction": "MEMBER_DIRECTION_REQUEST",
+              "encoded_size": {
+                "minimum_bytes": "2",
+                "exact_bytes": "2",
+                "maximum_bytes": "2"
+              }
+            },
+            {
+              "direction": "MEMBER_DIRECTION_RESPONSE",
+              "encoded_size": {
+                "minimum_bytes": "2",
+                "exact_bytes": "2",
+                "maximum_bytes": "2"
+              }
+            }
+          ]
+        },
+        {
+          "name": "preview_updated",
+          "member_id": 32769,
+          "kind": "event",
+          "response_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingPreviewUpdate"
+          },
+          "event_group_names": [
+            "multicast_previews"
+          ],
+          "publication": {
+            "kind": "PUBLICATION_POLICY_KIND_ON_CHANGE"
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+            "line": 83,
+            "column": 1
+          },
+          "directional_payloads": [
+            {
+              "direction": "MEMBER_DIRECTION_NOTIFICATION",
+              "encoded_size": {
+                "minimum_bytes": "2",
+                "maximum_bytes": "1502"
+              }
+            }
+          ]
+        },
+        {
+          "name": "lighting_snapshot_notifier",
+          "member_id": 32770,
+          "kind": "field_notifier",
+          "response_payload_type": {
+            "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSnapshot"
+          },
+          "event_group_names": [
+            "unicast_snapshots"
+          ],
+          "publication": {
+            "kind": "PUBLICATION_POLICY_KIND_ON_CHANGE"
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+            "line": 83,
+            "column": 1
+          },
+          "directional_payloads": [
+            {
+              "direction": "MEMBER_DIRECTION_NOTIFICATION",
+              "encoded_size": {
+                "minimum_bytes": "1500",
+                "exact_bytes": "1500",
+                "maximum_bytes": "1500"
+              }
+            }
+          ]
+        }
+      ],
+      "event_groups": [
+        {
+          "name": "unicast_snapshots",
+          "id": 1
+        },
+        {
+          "name": "multicast_previews",
+          "id": 2
+        }
+      ],
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 83,
+        "column": 1
+      },
+      "service_lineage": {
+        "id": "smart-workshop-lighting-sd-tp"
+      },
+      "fields": [
+        {
+          "field": {
+            "name": "lighting_snapshot",
+            "value_type": {
+              "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSnapshot"
+            },
+            "notifier_id": 32770,
+            "event_group_names": [
+              "unicast_snapshots"
+            ],
+            "publication": {
+              "kind": "PUBLICATION_POLICY_KIND_ON_CHANGE"
+            }
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+            "line": 83,
+            "column": 1
+          }
+        }
+      ]
+    }
+  ],
+  "payload_types": [
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingState"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "2",
+        "exact_bytes": "2",
+        "maximum_bytes": "2"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+        "line": 20,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "brightness_percent",
+            "field_number": 1,
+            "options": {
+              "wire_order": 1,
+              "scalar_representation": "SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8"
+            },
+            "encoded_size": {
+              "minimum_bytes": "1",
+              "exact_bytes": "1",
+              "maximum_bytes": "1"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+              "line": 26,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        },
+        {
+          "member": {
+            "name": "mode",
+            "field_number": 2,
+            "type": {
+              "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingMode"
+            },
+            "options": {
+              "wire_order": 2,
+              "scalar_representation": "SCALAR_REPRESENTATION_ENUM_8"
+            },
+            "encoded_size": {
+              "minimum_bytes": "1",
+              "exact_bytes": "1",
+              "maximum_bytes": "1"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+              "line": 31,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 2
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingPreviewUpdate"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "2",
+        "maximum_bytes": "1502"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 51,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "pixels",
+            "field_number": 1,
+            "options": {
+              "wire_order": 1,
+              "array": {
+                "length_field_width": "LENGTH_FIELD_WIDTH_16",
+                "max_items": "1500"
+              },
+              "max_encoded_bytes": "1502"
+            },
+            "encoded_size": {
+              "minimum_bytes": "2",
+              "maximum_bytes": "1502"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 56,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+              "length_field_width": "LENGTH_FIELD_WIDTH_16"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceGetLightingStateRequest"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "1",
+        "exact_bytes": "1",
+        "maximum_bytes": "1"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 12,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "request_token",
+            "field_number": 1,
+            "options": {
+              "wire_order": 1,
+              "scalar_representation": "SCALAR_REPRESENTATION_UNSIGNED_INTEGER_8"
+            },
+            "encoded_size": {
+              "minimum_bytes": "1",
+              "exact_bytes": "1",
+              "maximum_bytes": "1"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 17,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceGetLightingStateResponse"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "2",
+        "exact_bytes": "2",
+        "maximum_bytes": "2"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 24,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "state",
+            "field_number": 1,
+            "type": {
+              "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingState"
+            },
+            "options": {
+              "wire_order": 1
+            },
+            "encoded_size": {
+              "minimum_bytes": "2",
+              "exact_bytes": "2",
+              "maximum_bytes": "2"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 29,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceSetLightingStateRequest"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "2",
+        "exact_bytes": "2",
+        "maximum_bytes": "2"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 33,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "desired_state",
+            "field_number": 1,
+            "type": {
+              "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingState"
+            },
+            "options": {
+              "wire_order": 1
+            },
+            "encoded_size": {
+              "minimum_bytes": "2",
+              "exact_bytes": "2",
+              "maximum_bytes": "2"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 38,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSDTPServiceSetLightingStateResponse"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "2",
+        "exact_bytes": "2",
+        "maximum_bytes": "2"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 42,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "accepted_state",
+            "field_number": 1,
+            "type": {
+              "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingState"
+            },
+            "options": {
+              "wire_order": 1
+            },
+            "encoded_size": {
+              "minimum_bytes": "2",
+              "exact_bytes": "2",
+              "maximum_bytes": "2"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 47,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    },
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingSnapshot"
+      },
+      "options": {
+        "struct_layout": {
+          "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+        }
+      },
+      "encoded_size": {
+        "minimum_bytes": "1500",
+        "exact_bytes": "1500",
+        "maximum_bytes": "1500"
+      },
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+        "line": 67,
+        "column": 1
+      },
+      "layout_elements": [
+        {
+          "member": {
+            "name": "pixels",
+            "field_number": 1,
+            "options": {
+              "wire_order": 1,
+              "array": {
+                "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+                "fixed_items": "1500"
+              },
+              "max_encoded_bytes": "1500"
+            },
+            "encoded_size": {
+              "minimum_bytes": "1500",
+              "exact_bytes": "1500",
+              "maximum_bytes": "1500"
+            },
+            "location": {
+              "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_sd_tp.proto",
+              "line": 72,
+              "column": 3
+            },
+            "effective_layout": {
+              "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+              "length_field_width": "LENGTH_FIELD_WIDTH_NONE"
+            }
+          }
+        }
+      ],
+      "effective_layout": {
+        "byte_order": "BYTE_ORDER_BIG_ENDIAN",
+        "length_field_width": "LENGTH_FIELD_WIDTH_NONE",
+        "maximum_wire_order": 1
+      }
+    }
+  ],
+  "enum_types": [
+    {
+      "type": {
+        "fqn": ".io.github.someip_proto.examples.v1alpha1.LightingMode"
+      },
+      "options": {
+        "wire_width_bits": 8
+      },
+      "values": [
+        {
+          "name": "LIGHTING_MODE_UNSPECIFIED",
+          "options": {
+            "non_sendable_placeholder": true
+          },
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+            "line": 14,
+            "column": 3
+          }
+        },
+        {
+          "name": "LIGHTING_MODE_WORK",
+          "number": 1,
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+            "line": 15,
+            "column": 3
+          }
+        },
+        {
+          "name": "LIGHTING_MODE_INSPECTION",
+          "number": 2,
+          "location": {
+            "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+            "line": 16,
+            "column": 3
+          }
+        }
+      ],
+      "location": {
+        "import_path": "io/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto",
+        "line": 11,
+        "column": 1
+      }
+    }
+  ]
+}

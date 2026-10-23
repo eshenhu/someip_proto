@@ -1,0 +1,85 @@
+
+àv1alpha1@ded0f71bba9a4328cb2c7f246bb2a0bd87a2c6f9abfd370eddc7ac470df2bbc4"v0.1.0*v0.1.02(94e4ea932e50273897a014bc57f7ae89f1816b84”
+smart-workshop-lighting¯
+"◊
+æêî"smart-workshop-lighting*
+primary
+192.0.2.20 §Ó2primaryB
+smart-workshop-lightingJ\
+H
+F.io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingService**ÅÄ*ÇÄ"W
+Qio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto	*∂
+\
+H
+F.io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingService**ÅÄ*ÇÄ
+smart-workshop-lighting *W
+Qio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto	BBÅÄBÇÄJb."
+primary
+192.0.2.20 §Ó0¯
+8."
+primary
+192.0.2.20 §Ó0¯
+8J4ÅÄ."
+primary
+192.0.2.20 §Ó0¯
+8J4ÇÄ."
+primary
+192.0.2.20 §Ó0¯
+8*W
+Qio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting_deployment.proto	«
+H
+F.io.github.someip_proto.examples.v1alpha1.SmartWorkshopLightingService*ï
+SetLightingStatemethod"C
+A.io.github.someip_proto.examples.v1alpha1.SetLightingStateRequest*D
+B.io.github.someip_proto.examples.v1alpha1.SetLightingStateResponseBL
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.protoUJ(R
+R
+*Œ
+lighting_state_changedÅÄevent*9
+7.io.github.someip_proto.examples.v1alpha1.LightingState2lighting_updates:BL
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto;R
+*ÿ
+lighting_state_notifierÇÄfield_notifier*9
+7.io.github.someip_proto.examples.v1alpha1.LightingState2lighting_updates:BL
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto;R
+2
+lighting_updates:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto;B
+smart-workshop-lightingJµ
+e
+lighting_state9
+7.io.github.someip_proto.examples.v1alpha1.LightingState(ÇÄ2lighting_updates:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto;"¡
+9
+7.io.github.someip_proto.examples.v1alpha1.LightingState"*L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto2x
+v
+brightness_percent"*:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.protoB2•
+¢
+mode8
+6.io.github.someip_proto.examples.v1alpha1.LightingMode"*:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.protoB: "Ÿ
+C
+A.io.github.someip_proto.examples.v1alpha1.SetLightingStateRequest"*L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto&2≠
+™
+desired_state9
+7.io.github.someip_proto.examples.v1alpha1.LightingState"*:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto,B: "€
+D
+B.io.github.someip_proto.examples.v1alpha1.SetLightingStateResponse"*L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto02Æ
+´
+accepted_state9
+7.io.github.someip_proto.examples.v1alpha1.LightingState"*:L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto6B: :Õ
+8
+6.io.github.someip_proto.examples.v1alpha1.LightingModem
+LIGHTING_MODE_UNSPECIFIED"L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.protod
+LIGHTING_MODE_WORK"L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.protoj
+LIGHTING_MODE_INSPECTION"L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto"L
+Fio/github/someip_proto/examples/v1alpha1/smart_workshop_lighting.proto
