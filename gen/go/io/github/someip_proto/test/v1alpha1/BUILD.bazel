@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "v1alpha1",
+    srcs = [
+        "phase_2_1_invalid_fixture.pb.go",
+        "phase_2_1_schema_fixture.pb.go",
+        "schema_fixture.pb.go",
+        "sd_tp_schema_fixture.pb.go",
+    ],
+    importpath = "github.com/eshenhu/someip_proto/gen/go/io/github/someip_proto/test/v1alpha1",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//gen/go/io/github/someip_proto/manifest/v1alpha1",
+        "//gen/go/io/github/someip_proto/options/v1alpha1",
+        "@org_golang_google_protobuf//reflect/protoreflect:go_default_library",
+        "@org_golang_google_protobuf//runtime/protoimpl:go_default_library",
+    ],
+)
